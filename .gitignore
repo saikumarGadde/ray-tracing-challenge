@@ -1,0 +1,68 @@
+# bazel output                                                                          
+bazel-*                                                                                 
+**/bazel-*                                                                              
+*.pyo                                                                                   
+*.pyc                                                                                   
+.dazel_run                                                                              
+.dazelrc                                                                                
+*~                                                                                      
+                                                                                        
+# docker output                                                                         
+docker-build-output                                                                     
+                                                                                        
+# Intellij meta data folder                                                             
+**/.idea*                                                                               
+**/*.iml                                                                                
+                                                                                        
+# Backup file                                                                           
+*.bak                                                                                   
+                                                                                        
+# Mac meta data file                                                                    
+.DS_Store                                                                               
+**/.DS_Store                                                                            
+                                                                                        
+# password file                                                                         
+password                                                                                
+                                                                                        
+# VSCode / Eslint config                                                                
+**/.eslintrc.json                                                                       
+**/.vscode*                                                                             
+typings.json                                                                            
+tsconfig.json                                                                           
+**/jsconfig.json                                                                        
+typings                                                                                 
+node_modules                                                                            
+                                                                                        
+# merge original files                                                                  
+*.orig                                                                                  
+                                                                                        
+# Jupyter notebook                                                                      
+**/.ipynb_checkpoints                                                                   
+                                                                                        
+# Eclipse?                                                                              
+**/workbench.xmi                                                                        
+**/*.cproject                                                                           
+**/*.project                                                                            
+**/*.settings                                                                           
+                                                                                        
+# Vim                                                                                   
+.vim-bookmarks                                                                          
+**/*.swp                                                                                
+# Vim YouCompleteMe.                                                                    
+compile_commands.json                                                                   
+                                                                                        
+# Release                                                                               
+deepmap_api_impl/release/*                                                              
+deepmap_api_impl/lib/*.so                                                               
+                                                                                        
+# Docker temporary build cruft                                                          
+docker-build/*                                                                          
+                                                                                        
+# Imgui generated user data file.                                                       
+imgui.ini                                                                               
+                                                                                        
+# dev environment auto generated file                                                   
+deploy/kube-deploy-user.cfg                                                             
+                                                                                        
+# Clion bazel build project file                                                        
+**/.clwb                                                          
