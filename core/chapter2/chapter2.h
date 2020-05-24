@@ -1,6 +1,12 @@
 #pragma once
 
+#include <stdint.h>
+#include <stdio.h>
+#include <cmath>
+#include <iostream>
+#include <string>
 #include "core/chapter1/chapter1.h"
+#include "core/protos/visualization_utils.h"
 
 // Create a color over here
 struct RGBColor AddColors(struct RGBColor color1, struct RGBColor color2);
@@ -18,3 +24,17 @@ struct RGBColor ScaleColor(struct RGBColor color1, float scale);
  * C2 colored object.
  */
 struct RGBColor MultiplyColors(struct RGBColor color1, struct RGBColor color2);
+
+void WritePixel(struct Canvas& canvas, uint64_t height, uint64_t width,
+                struct RGBColor color);
+
+// Store the canvas to a PPM file
+void CanvasToPPM(struct Canvas& canvas, const char ppm_file_path[]);
+
+// Count number of digits in an integer
+int NumberOfDigitsInInteger(int number) {
+  return std::floor(log10(number) + 1);
+}
+
+// Read the PPM File to a variable
+void PPMToCanvas(const char ppm_file_path[]);
