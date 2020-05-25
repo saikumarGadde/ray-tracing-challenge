@@ -25,4 +25,3 @@ http_archive(
     url = "https://bitbucket.org/eigen/eigen/get/c5e90d9.tar.gz",
     strip_prefix="eigen-eigen-c5e90d9e764e",
 )
-
