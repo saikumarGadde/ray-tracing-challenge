@@ -46,5 +46,47 @@ TEST(Chapter5Test, TestIntersection) {
   struct Ray ray(origin, direction);
 
   struct Sphere sphere;
-  std::vector<float> intersections = Intersect(ray, sphere);
+  std::vector<struct Intersection*> intersections = Intersect(ray, sphere);
+  EXPECT_EQ((intersections[0])->t, 4.0f);
+  EXPECT_EQ(intersections[1]->t, 6.0f);
+
+  // Test case for an intersection tangentially
+  origin = Point1Dim(0, 1, -5);
+  struct Ray ray2(origin, direction);
+  intersections = Intersect(ray2, sphere);
+  EXPECT_EQ(intersections[0]->t, 5.0f);
+  EXPECT_EQ(intersections[1]->t, 5.0f);
+
+  // Test case for no Intersections
+  origin = Point1Dim(0, 2, -5);
+  struct Ray ray3(origin, direction);
+  intersections = Intersect(ray3, sphere);
+  EXPECT_EQ(intersections.size(), 0);
+
+  // Ray starting at the center of the sphere
+  origin = Point1Dim(0, 0, 0);
+  struct Ray ray4(origin, direction);
+  intersections = Intersect(ray4, sphere);
+  EXPECT_EQ(intersections.size(), 2);
+  EXPECT_EQ(intersections[0]->t, -1.0f);
+  EXPECT_EQ(intersections[1]->t, 1.0f);
+
+  // Sphere is behind the ray
+  origin = Point1Dim(0, 0, 5);
+  struct Ray ray5(origin, direction);
+  intersections = Intersect(ray5, sphere);
+  EXPECT_EQ(intersections.size(), 2);
+  EXPECT_EQ(intersections[0]->t, -6.0f);
+  EXPECT_EQ(intersections[1]->t, -4.0f);
+};
+
+TEST(Chapter5Test, TestTrackingIntersections) {
+  // Tests tracking intersections
+  struct Sphere sphere;
+  // Create a data structure of an Intersection
+  struct Intersection intersection(3.5, sphere);
+  // Assertions
+  EXPECT_EQ(intersection.t, 3.5f);
+  EXPECT_EQ(intersection.sphere.center, sphere.center);
+  EXPECT_EQ(intersection.sphere.radius, sphere.radius);
 }

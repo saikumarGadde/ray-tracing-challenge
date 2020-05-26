@@ -3,6 +3,8 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <cmath>
+#include <iostream>
+#include <vector>
 #include "core/chapter4/chapter4.h"
 
 /**
@@ -26,15 +28,41 @@ struct Sphere {
   // Constructor of the Sphere with a center and radius
   Sphere(Eigen::Vector4f& center_, float radius_)
       : center(center_), radius(radius_) {}
+
+  Sphere() {
+    center << 0.0f, 0.0f, 0.0f, 1.0f;
+    radius = 1;
+  }
   // Store the center fo the sphere
   Eigen::Vector4f center;
-  center <<
-      // Store the radius of the Sphere
-      float radius;
+  // Store the radius of the Sphere
+  float radius;
+};
+
+enum ObjectType {
+  SPHERE = 0,
+  CONE = 1,
+};
+
+struct Intersection {
+  // Constructor to create an intersection with distance along the ray and
+  // the type of the object
+  Intersection(float t_, struct Sphere& sphere_) : t(t_), sphere(sphere_) {
+    // Set the type of the object over here
+    object_type = ObjectType::SPHERE;
+  }
+
+  // Object that was intersected
+  struct Sphere& sphere;
+  // T value of the intersection
+  float t;
+  // Type of the object
+  ObjectType object_type;
 };
 
 // Travelling along the ray from the starting point
-Eigen::Vector4f Position(struct Ray ray, float distance);
+Eigen::Vector4f Position(const struct Ray ray, const float distance);
 
 // Method to intersect the ray and sphere
-void Intersect(struct Ray ray, struct Sphere sphere);
+std::vector<struct Intersection*> Intersect(struct Ray ray,
+                                            struct Sphere sphere);
