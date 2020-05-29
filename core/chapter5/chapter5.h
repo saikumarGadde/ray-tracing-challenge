@@ -4,9 +4,9 @@
 #include <Eigen/Dense>
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <vector>
 #include "core/chapter4/chapter4.h"
-
 /**
   Important points from the book
   1. Most basic muscle in the body of a ray tracer - Ray Casting
@@ -32,11 +32,14 @@ struct Sphere {
   Sphere() {
     center << 0.0f, 0.0f, 0.0f, 1.0f;
     radius = 1;
+    transform = Eigen::Matrix4f::Identity();
   }
   // Store the center fo the sphere
   Eigen::Vector4f center;
   // Store the radius of the Sphere
   float radius;
+  // transform of the sphere object
+  Eigen::Matrix4f transform;
 };
 
 enum ObjectType {
@@ -60,9 +63,11 @@ struct Intersection {
   ObjectType object_type;
 };
 
+struct Intersection* Hit(struct Intersection* intersections[], int size);
 // Travelling along the ray from the starting point
 Eigen::Vector4f Position(const struct Ray ray, const float distance);
-
 // Method to intersect the ray and sphere
 std::vector<struct Intersection*> Intersect(struct Ray ray,
                                             struct Sphere sphere);
+// Transformation with a transformation matrix and vector or ray
+struct Ray Transform(Eigen::Matrix4f& transform_matrix, struct Ray ray);

@@ -7,10 +7,14 @@ Eigen::Vector4f Position(const struct Ray ray, const float distance) {
 // Mehtod to intersect the ray and sphere
 std::vector<struct Intersection*> Intersect(struct Ray ray,
                                             struct Sphere sphere) {
+  // Transform the ray using the sphere.transform transformation
+  Eigen::Matrix4f sphere_transform = sphere.transform;
+  Eigen::Matrix4f sphere_transform_inverse = sphere_transform.inverse();
+  struct Ray ray2 = Transform(sphere_transform_inverse, ray);
   // Vector from the spheres center to the ray origin
-  Eigen::Vector4f sphere_to_ray = ray.origin - sphere.center;
-  float a = ray.direction.dot(ray.direction);
-  float b = 2 * (ray.direction.dot(sphere_to_ray));
+  Eigen::Vector4f sphere_to_ray = ray2.origin - sphere.center;
+  float a = ray2.direction.dot(ray2.direction);
+  float b = 2 * (ray2.direction.dot(sphere_to_ray));
   float c = sphere_to_ray.dot(sphere_to_ray) - sphere.radius * sphere.radius;
   float discriminant = b * b - 4 * a * c;
 
@@ -35,6 +39,30 @@ std::vector<struct Intersection*> Intersect(struct Ray ray,
     intersections.push_back(intersection2);
     intersections.push_back(intersection1);
   }
-
   return intersections;
+}
+
+struct Intersection* Hit(struct Intersection* intersections[], int size) {
+  // Have to sort the intersections over here
+  float min_value = std::numeric_limits<float>::max();
+  struct Intersection* result = nullptr;
+  for (int i = 0; i < size; i++) {
+    if (intersections[i]->t < 0) {
+      continue;
+    } else {
+      if (intersections[i]->t < min_value) {
+        min_value = intersections[i]->t;
+        result = intersections[i];
+      }
+    }
+  }
+  return result;
+}
+
+// Transformation with a transformation matrix and vector or ray
+struct Ray Transform(Eigen::Matrix4f& transform_matrix, struct Ray ray) {
+  Eigen::Vector4f transformed_origin = transform_matrix * ray.origin;
+  Eigen::Vector4f transformed_direction = transform_matrix * ray.direction;
+  struct Ray transformed_ray(transformed_origin, transformed_direction);
+  return transformed_ray;
 }
