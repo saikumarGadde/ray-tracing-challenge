@@ -66,3 +66,54 @@ struct Ray Transform(Eigen::Matrix4f& transform_matrix, struct Ray ray) {
   struct Ray transformed_ray(transformed_origin, transformed_direction);
   return transformed_ray;
 }
+
+float Magnitude(Eigen::Vector4f& vector) {
+  return sqrt(vector[0] * vector[0] + vector[1] * vector[1] +
+              vector[2] * vector[2]);
+}
+
+Eigen::Vector4f Normalization(Eigen::Vector4f& vector) {
+  Eigen::Vector4f normalized_vector;
+  float magnitude = Magnitude(vector);
+  normalized_vector[0] = vector[0] / magnitude;
+  normalized_vector[1] = vector[1] / magnitude;
+  normalized_vector[2] = vector[2] / magnitude;
+  normalized_vector[3] = vector[3];
+  return normalized_vector;
+}
+
+// Putting it together
+void Chapter5Task(float canvas_pixels, float wall_size, float wall_z,
+                  std::string canvas_file_path) {
+  float pixel_size = wall_size / canvas_pixels;
+  float half = wall_size / 2;
+
+  struct Canvas canvas(canvas_pixels, canvas_pixels);
+  struct RGBColor rgb_color = {1, 0, 0};
+  struct Sphere sphere;
+  Eigen::Matrix4f scaling_matrix = Scaling(1, 0.5, 1);
+  sphere.transform = scaling_matrix;
+
+  Eigen::Vector4f ray_origin = Point1Dim(0, 0, -5);
+  // For each row of pixels in the canvas
+  for (int y = 0; y < canvas_pixels; y++) {
+    // Compute the world Y Coordinate
+    float world_y = half - pixel_size * y;
+    for (int x = 0; x < canvas_pixels; x++) {
+      float world_x = half - pixel_size * x;
+
+      Eigen::Vector4f point_on_canvas = Point1Dim(world_x, world_y, wall_z);
+      Eigen::Vector4f ray_direction = point_on_canvas - ray_origin;
+      Eigen::Vector4f normalized_vector = Normalization(ray_direction);
+      struct Ray ray(ray_origin, normalized_vector);
+
+      std::vector<struct Intersection*> intersections = Intersect(ray, sphere);
+      struct Intersection* hit = Hit(&intersections[0], intersections.size());
+      if (hit != nullptr) {
+        WritePixel(canvas, y, x, rgb_color);
+      }
+    }
+  }
+
+  CanvasToPPM(canvas, canvas_file_path.c_str());
+}

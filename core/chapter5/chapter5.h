@@ -1,12 +1,17 @@
 #pragma once
 #define _USE_MATH_DEFINES
+#include <math.h>
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <cmath>
 #include <iostream>
 #include <limits>
 #include <vector>
+#include "core/chapter2/chapter2.h"
 #include "core/chapter4/chapter4.h"
+#include "core/protos/entities_3d.h"
+#include "core/protos/visualization_utils.h"
+
 /**
   Important points from the book
   1. Most basic muscle in the body of a ray tracer - Ray Casting
@@ -63,11 +68,24 @@ struct Intersection {
   ObjectType object_type;
 };
 
+// Calculate the intersections
 struct Intersection* Hit(struct Intersection* intersections[], int size);
+
 // Travelling along the ray from the starting point
 Eigen::Vector4f Position(const struct Ray ray, const float distance);
+
 // Method to intersect the ray and sphere
 std::vector<struct Intersection*> Intersect(struct Ray ray,
                                             struct Sphere sphere);
+
 // Transformation with a transformation matrix and vector or ray
 struct Ray Transform(Eigen::Matrix4f& transform_matrix, struct Ray ray);
+
+// Putting it together
+void Chapter5Task(float canvas_pixels, float wall_size, float wall_z,
+                  std::string canvas_file_path);
+
+float Magnitude(Eigen::Vector4f& vector);
+
+// Normalization of the point
+Eigen::Vector4f Normalization(Eigen::Vector4f& vector);

@@ -1,34 +1,35 @@
-package(default_visibility=["//visibility:public"])
+package (default_visibility = ["//visibility:public"])
 
 cc_library(
-  name = "chapter5",
-  srcs = ["chapter5.cc"],
-  hdrs = ["chapter5.h"],
+  name = "chapter6",
+  srcs = ["chapter6.cc"],
+  hdrs = ["chapter6.h"],
   deps = [
     "//core/chapter1:chapter1",
     "//core/chapter2:chapter2",
     "//core/chapter3:chapter3",
     "//core/chapter4:chapter4",
+    "//core/chapter5:chapter5",
     "//core/protos:visualization_utils",
     "//core/protos:entities_3d",
     "@eigen",
-  ],
+  ]
 )
 
 cc_binary(
-  name = "chapter5_main",
-  srcs = ["chapter5_main.cc"],
+  name = "chapter6_main",
+  srcs = ["chapter6_main.cc"],
   deps = [
-    ":chapter5",
+    ":chapter6",
   ]
 )
 
 cc_test(
-  name = "chapter5_test",
-  srcs = ["chapter5_test.cc"],
+  name = "chapter6_test",
+  srcs = ["chapter6_test.cc"],
   copts = ["-Iexternal/gtest/include"],
   deps = [
-    ":chapter5",
+    ":chapter6",
     "//external:gtest",
-  ],
+  ]
 )

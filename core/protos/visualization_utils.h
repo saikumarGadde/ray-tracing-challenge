@@ -14,7 +14,6 @@ struct Canvas {
       canvas.push_back(rows);
     }
   }
-
   // // Constructor to create canvas from a PPM File
   // Canvas(const char ppm_file_path[]) {
   //   // @TODO :: You have to read the ppm file over here and obtain the

@@ -32,9 +32,7 @@ void WritePixel(struct Canvas& canvas, uint64_t height, uint64_t width,
 void CanvasToPPM(struct Canvas& canvas, const char ppm_file_path[]);
 
 // Count number of digits in an integer
-int NumberOfDigitsInInteger(int number) {
-  return std::floor(log10(number) + 1);
-}
+int NumberOfDigitsInInteger(int number);
 
 // Read the PPM File to a variable
 void PPMToCanvas(const char ppm_file_path[]);

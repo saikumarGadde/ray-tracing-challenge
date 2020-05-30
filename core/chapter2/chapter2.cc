@@ -47,6 +47,11 @@ void WritePixel(struct Canvas& canvas, uint64_t height, uint64_t width,
   canvas.canvas[height][width] = color;
 }
 
+// Count number of digits in an integer
+int NumberOfDigitsInInteger(int number) {
+  return std::floor(log10(number) + 1);
+}
+
 // Store the canvas to a PPM file
 void CanvasToPPM(struct Canvas& canvas, const char ppm_file_path[]) {
   // Open a PPM file

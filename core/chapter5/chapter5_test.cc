@@ -146,7 +146,6 @@ TEST(Chapter5Test, SphereTransformationsTest) {
   EXPECT_EQ(sphere.transform, identity_matrix);
 
   // Testing the transformation of the ray using sphere.transform
-
   Eigen::Vector4f origin = Point1Dim(0, 0, -5);
   Eigen::Vector4f direction = Vector1Dim(0, 0, 1);
   struct Ray ray(origin, direction);
@@ -155,4 +154,9 @@ TEST(Chapter5Test, SphereTransformationsTest) {
   std::vector<struct Intersection*> intersections = Intersect(ray, sphere2);
   EXPECT_EQ(intersections[0]->t, 3);
   EXPECT_EQ(intersections[1]->t, 7);
-}
+
+  // Testing method 2
+  sphere2.transform = Translation(5, 0, 0);
+  std::vector<struct Intersection*> intersections2 = Intersect(ray, sphere2);
+  EXPECT_EQ(intersections2.size(), 0);
+};
