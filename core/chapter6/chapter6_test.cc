@@ -36,3 +36,7 @@ TEST(Chapter6Test, NormalsOnSphere) {
   EXPECT_FLOAT_EQ(normal_vector3[2], (float)(sqrt(3) / 3.0));
   EXPECT_FLOAT_EQ(normal_vector3[3], 0.0f);
 };
+
+TEST(Chapter6Test, TransformingNormalsTest) {
+  // Test 1 to transform normals
+}

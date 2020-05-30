@@ -3,7 +3,6 @@
 
 Eigen::Vector4f NormalAt(struct Sphere sphere, Eigen::Vector4f& point) {
   // @TODO
-
   Eigen::Vector4f normal_vector = point - sphere.center;
   normal_vector = Normalization(normal_vector);
   return normal_vector;
