@@ -72,7 +72,7 @@ float Magnitude(Eigen::Vector4f& vector) {
               vector[2] * vector[2]);
 }
 
-Eigen::Vector4f Normalization(Eigen::Vector4f& vector) {
+Eigen::Vector4f Normalization(Eigen::Vector4f vector) {
   Eigen::Vector4f normalized_vector;
   float magnitude = Magnitude(vector);
   normalized_vector[0] = vector[0] / magnitude;
@@ -91,7 +91,7 @@ void Chapter5Task(float canvas_pixels, float wall_size, float wall_z,
   struct Canvas canvas(canvas_pixels, canvas_pixels);
   struct RGBColor rgb_color = {1, 0, 0};
   struct Sphere sphere;
-  Eigen::Matrix4f scaling_matrix = Scaling(1, 0.5, 1);
+  Eigen::Matrix4f scaling_matrix = Scaling(1, 1, 1);
   sphere.transform = scaling_matrix;
 
   Eigen::Vector4f ray_origin = Point1Dim(0, 0, -5);

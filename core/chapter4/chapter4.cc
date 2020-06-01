@@ -63,8 +63,8 @@ Eigen::Matrix4f RotationZ(float radians) {
   Eigen::Matrix4f rotation_matrix = Eigen::Matrix4f::Identity();
   rotation_matrix(0, 0) = cos(radians);
   rotation_matrix(0, 1) = -sin(radians);
-  rotation_matrix(1, 1) = sin(radians);
-  rotation_matrix(1, 2) = cos(radians);
+  rotation_matrix(1, 0) = sin(radians);
+  rotation_matrix(1, 1) = cos(radians);
   return rotation_matrix;
 }
 
