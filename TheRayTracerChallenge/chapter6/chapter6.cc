@@ -140,6 +140,5 @@ void Chapter6Task(float canvas_pixels, float wall_size, float wall_z,
       }
     }
   }
-
   CanvasToPPM(canvas, canvas_file_path.c_str());
 }
