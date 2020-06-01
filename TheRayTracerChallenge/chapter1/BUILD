@@ -14,7 +14,7 @@ cc_test(
   srcs=["chapter1_test.cc"],
   copts=["-Iexternal/gtest/include"],
   deps=[
-    "//external:gtest",
     ":chapter1",
+    "//external:gtest",
   ],
 )

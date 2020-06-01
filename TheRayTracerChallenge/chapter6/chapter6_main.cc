@@ -1,4 +1,4 @@
-#include "core/chapter6/chapter6.h"
+#include "TheRayTracerChallenge/chapter6/chapter6.h"
 
 int main(int argc, char* argv[]) {
   //

@@ -1,8 +1,8 @@
-#include "core/chapter6/chapter6.h"
+#include "TheRayTracerChallenge/chapter6/chapter6.h"
 #include <math.h>
 #include <cmath>
 #include <iostream>
-#include "core/chapter5/chapter5.h"
+#include "TheRayTracerChallenge/chapter5/chapter5.h"
 
 Eigen::Vector4f NormalAt(struct Sphere sphere, Eigen::Vector4f& point) {
   // @TODO

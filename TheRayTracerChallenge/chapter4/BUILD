@@ -5,9 +5,9 @@ cc_library(
   srcs = ["chapter4.cc"],
   hdrs = ["chapter4.h"],
   deps = [
-    "//core/chapter1:chapter1",
-    "//core/chapter2:chapter2",
-    "//core/chapter3:chapter3",
+    "//TheRayTracerChallenge/chapter1:chapter1",
+    "//TheRayTracerChallenge/chapter2:chapter2",
+    "//TheRayTracerChallenge/chapter3:chapter3",
     "//core/protos:visualization_utils",
     "@eigen",
   ],

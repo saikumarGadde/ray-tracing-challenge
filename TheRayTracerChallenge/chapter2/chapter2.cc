@@ -1,4 +1,4 @@
-#include "core/chapter2/chapter2.h"
+#include "TheRayTracerChallenge/chapter2/chapter2.h"
 #include <assert.h>
 #include <math.h>
 #include <cmath>

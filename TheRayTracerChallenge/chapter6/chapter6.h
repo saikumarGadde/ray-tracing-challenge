@@ -7,7 +7,7 @@
 #include <iostream>
 #include <limits>
 #include <vector>
-
+#include "TheRayTracerChallenge/chapter5/chapter5.h"
 #include "core/protos/visualization_utils.h"
 
 /* Different types of lighting
@@ -23,6 +23,7 @@
 struct PointLight {
   PointLight(Eigen::Vector3f intensity_, Eigen::Vector4f point_)
       : intensity(intensity_), point(point_) {}
+  PointLight() {}
   // Color
   Eigen::Vector3f intensity;
   // Position of the light

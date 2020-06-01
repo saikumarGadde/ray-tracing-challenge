@@ -6,3 +6,4 @@
 #include <cmath>
 #include <iostream>
 #include <string>
+#include "TheRayTracerChallenge/chapter2/chapter2.h"

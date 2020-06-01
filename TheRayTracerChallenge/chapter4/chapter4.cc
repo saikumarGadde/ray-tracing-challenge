@@ -1,4 +1,4 @@
-#include "core/chapter4/chapter4.h"
+#include "TheRayTracerChallenge/chapter4/chapter4.h"
 
 Eigen::Vector4f Point1Dim(float x, float y, float z) {
   Eigen::Vector4f point;

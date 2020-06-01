@@ -1,4 +1,4 @@
-#include "core/chapter5/chapter5.h"
+#include "TheRayTracerChallenge/chapter5/chapter5.h"
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include "gtest/gtest.h"

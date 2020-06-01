@@ -7,8 +7,7 @@
 #include <iostream>
 #include <limits>
 #include <vector>
-#include "core/chapter2/chapter2.h"
-#include "core/chapter4/chapter4.h"
+#include "TheRayTracerChallenge/chapter4/chapter4.h"
 #include "core/protos/entities_3d.h"
 #include "core/protos/visualization_utils.h"
 
@@ -58,8 +57,12 @@ struct Material {
 // Struct of the Sphere
 struct Sphere {
   // Constructor of the Sphere with a center and radius
-  Sphere(Eigen::Vector4f& center_, float radius_)
-      : center(center_), radius(radius_) {}
+  Sphere(Eigen::Vector4f center_, float radius_, Eigen::Matrix4f transform_,
+         struct Material material_)
+      : center(center_),
+        radius(radius_),
+        transform(transform_),
+        material(material_) {}
 
   Sphere() {
     center << 0.0f, 0.0f, 0.0f, 1.0f;
@@ -75,6 +78,8 @@ struct Sphere {
   // Material of the object
   struct Material material;
 };
+
+typedef struct Sphere SphereObject;
 
 enum ObjectType {
   SPHERE = 0,

@@ -5,7 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include <string>
-#include "core/chapter1/chapter1.h"
+#include "TheRayTracerChallenge/chapter1/chapter1.h"
 #include "core/protos/visualization_utils.h"
 
 // Create a color over here

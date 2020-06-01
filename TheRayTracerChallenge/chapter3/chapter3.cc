@@ -1,1 +1,1 @@
-#include "core/chapter3/chapter3.h"
+#include "TheRayTracerChallenge/chapter3/chapter3.h"

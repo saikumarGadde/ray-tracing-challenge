@@ -3,6 +3,7 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <cmath>
+#include "TheRayTracerChallenge/chapter3/chapter3.h"
 
 // Creation of point and vector in Eigen library for efficient computation
 Eigen::Vector4f Point1Dim(float x, float y, float z);

@@ -1,4 +1,4 @@
-#include "core/chapter2/chapter2.h"
+#include "TheRayTracerChallenge/chapter2/chapter2.h"
 #include "core/protos/visualization_utils.h"
 #include "gtest/gtest.h"
 

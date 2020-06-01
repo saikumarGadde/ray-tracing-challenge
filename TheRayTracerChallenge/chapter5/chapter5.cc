@@ -1,4 +1,4 @@
-#include "core/chapter5/chapter5.h"
+#include "TheRayTracerChallenge/chapter5/chapter5.h"
 
 Eigen::Vector4f Position(const struct Ray ray, const float distance) {
   return ray.origin + (ray.direction * distance);

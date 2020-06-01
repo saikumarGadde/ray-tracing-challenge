@@ -1,4 +1,4 @@
-#include "core/chapter1/chapter1.h"
+#include "TheRayTracerChallenge/chapter1/chapter1.h"
 #include "gtest/gtest.h"
 
 namespace chapter1 {
