@@ -82,20 +82,33 @@ struct Sphere {
 typedef struct Sphere SphereObject;
 
 enum ObjectType {
-  SPHERE = 0,
-  CONE = 1,
+  RANDOM = 0,
+  SPHERE = 1,
+  CONE = 2,
+};
+
+struct Object {
+  Object() {
+    // Set object type to random where the World can contain all types of
+    // objects
+    object_type = ObjectType::RANDOM;
+  }
+
+  Object(struct Sphere sphere_) : sphere(sphere_) {
+    object_type = ObjectType::SPHERE;
+  }
+  struct Sphere sphere;
+  ObjectType object_type;
 };
 
 struct Intersection {
-  // Constructor to create an intersection with distance along the ray and
-  // the type of the object
-  Intersection(float t_, struct Sphere& sphere_) : t(t_), sphere(sphere_) {
-    // Set the type of the object over here
-    object_type = ObjectType::SPHERE;
-  }
+  // Default constructor
+  Intersection() {}
+  //
+  Intersection(float t_, struct Object object_) : t(t_), object(object_) {}
 
-  // Object that was intersected
-  struct Sphere& sphere;
+  // Object in the Intersection
+  struct Object object;
   // T value of the intersection
   float t;
   // Type of the object

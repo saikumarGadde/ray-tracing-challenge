@@ -131,10 +131,10 @@ void Chapter6Task(float canvas_pixels, float wall_size, float wall_z,
       if (hit != nullptr) {
         // @TODO
         Eigen::Vector4f point = Position(ray, hit->t);
-        Eigen::Vector4f normalv = NormalAt(hit->sphere, point);
+        Eigen::Vector4f normalv = NormalAt((*hit).object.sphere, point);
         Eigen::Vector4f eyev = -ray.direction;
-        Eigen::Vector3f color =
-            Lighting((*hit).sphere.material, point_light, point, eyev, normalv);
+        Eigen::Vector3f color = Lighting((*hit).object.sphere.material,
+                                         point_light, point, eyev, normalv);
         struct RGBColor rgb_color = {color(0), color(1), color(2)};
         WritePixel(canvas, y, x, rgb_color);
       }
