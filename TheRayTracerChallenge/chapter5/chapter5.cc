@@ -25,7 +25,6 @@ std::vector<struct Intersection*> Intersect(struct Ray ray,
 
   float t1 = (-b + sqrt(discriminant)) / (2 * a);
   float t2 = (-b - sqrt(discriminant)) / (2 * a);
-  std::cout << " T1: " << t1 << " T2 :: " << t2 << std::endl;
   // @TODO :: Use unique pointers over here
   struct Object sphere_object(sphere);
   struct Intersection* intersection1 = new Intersection(t1, sphere_object);

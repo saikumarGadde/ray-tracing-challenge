@@ -86,7 +86,6 @@ Eigen::Vector3f Lighting(struct Material material,
       specular = point_light.intensity * material.specular * factor;
     }
   }
-
   return ambient + diffuse + specular;
 }
 
