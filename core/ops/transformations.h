@@ -1,7 +1,7 @@
 #pragma once
+#include <Eigen/Core>
+#include <Eigen/Dense>
 
-namespace OPS {
-namespace TRANSFORMATIONS {
 // Translation transformation. A point is translated to a new point. A vector
 // remains the same.
 Eigen::Matrix4f Translation(float x, float y, float z);
@@ -22,6 +22,3 @@ Eigen::Matrix4f RotationZ(float radians);
 // Shearing transformation
 Eigen::Matrix4f Shearing(float x_y, float x_z, float y_x, float y_z, float z_x,
                          float z_y);
-
-}  // namespace TRANSFORMATIONS
-}  // namespace OPS

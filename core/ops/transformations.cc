@@ -1,8 +1,5 @@
 #include "core/ops/transformations.h"
 
-namespace OPS {
-namespace TRANSFORMATIONS {
-
 Eigen::Matrix4f Translation(float x, float y, float z) {
   Eigen::Matrix4f translation_matrix = Eigen::Matrix4f::Identity();
   translation_matrix(0, 3) = x;
@@ -58,6 +55,3 @@ Eigen::Matrix4f Shearing(float x_y, float x_z, float y_x, float y_z, float z_x,
   shearing_matrix(2, 1) = z_y;
   return shearing_matrix;
 }
-
-}  // namespace TRANSFORMATIONS
-}  // namespace OPS

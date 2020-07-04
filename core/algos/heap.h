@@ -2,4 +2,13 @@
 
 #include <vector>
 
-// @TODO :: Write the heap algo over here
+class Heap {
+  // COnstructor for Heap data structure
+  Heap() {}
+
+  // Insert into heap
+
+  // MOdify into heap
+
+  //
+}

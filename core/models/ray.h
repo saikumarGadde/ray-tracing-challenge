@@ -1,37 +1,66 @@
+#pragma once
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <iostream>
+#include <vector>
+#include "core/models/object.h"
+#include "core/models/sphere.h"
+#include "core/models/world.h"
 
+// Intersection of a ray with the other objects in the world
+struct Intersection {
+  // Default constructor
+  Intersection() {}
 
-struct Ray {
-  Ray(Eigen::Vector4f origin_, Eigen::Vector4f direction_)
-      : origin(origin_), direction(direction_) {}
-  // Store the origin, which is the starting point of the ray
-  Eigen::Vector4f origin;
-  // Store the vector, direction in which the ray points to
-  Eigen::Vector4f direction;
+  // Constructor with distance and object
+  Intersection(float t, struct Object object) : t_(t), object_(object) {}
+
+  // Object in the Intersection
+  struct Object object_;
+  // T value of the intersection
+  float t_;
+  // Type of the object
+  ObjectType object_type;
 };
 
-// Material struct
-struct Material {
-  Material(Eigen::Vector3f rgb_color_, float ambient_, float diffuse_,
-           float specular_, float shininess_)
-      : rgb_color(rgb_color_),
-        ambient(ambient_),
-        diffuse(diffuse_),
-        specular(specular_),
-        shininess(shininess_) {}
+class Ray {
+ public:
+  // Constructor for Ray class
+  Ray(Eigen::Vector4f origin, Eigen::Vector4f direction)
+      : origin_(origin), direction_(direction) {}
 
-  Material() {
-    rgb_color(0) = 1;
-    rgb_color(1) = 1;
-    rgb_color(2) = 1;
-    ambient = 0.1;
-    diffuse = 0.9;
-    specular = 0.9;
-    shininess = 200.0;
+  // Position at a distance along the ray
+  Eigen::Vector4f Position(const float distance) const;
+
+  // Applies transform to a Ray
+  void SetTransform(Eigen::Matrix4f transformation_matrix);
+
+  // Intersect a ray with a sphere
+  void IntersectObject(struct Object object);
+
+  // Intersect a ray with a world
+  void IntersectWorld(World world);
+
+  // Return origin
+  Eigen::Vector4f GetOrigin() { return origin_; }
+
+  // Return direction
+  Eigen::Vector4f GetDirection() { return direction_; }
+
+  // Get Intersections
+  std::vector<struct Intersection*>& GetIntersections() {
+    return intersections_;
   }
 
-  Eigen::Vector3f rgb_color;
-  float ambient;
-  float diffuse;
-  float specular;
-  float shininess;
+  void ClearIntersections() { intersections_.clear(); }
+
+ private:
+  // Origin of the ray
+  Eigen::Vector4f origin_;
+  // Direction of the ray
+  Eigen::Vector4f direction_;
+  // Intersections of the given ray
+  std::vector<struct Intersection*> intersections_;
+  // Function to add an intersection to list intersections_ with sorted order
+  void AddIntersection(struct Intersection* intersection);
 };

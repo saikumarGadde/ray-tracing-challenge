@@ -4,6 +4,18 @@ cc_library(
   name = "vector_ops",
   srcs = ["vector_ops.cc"],
   hdrs = ["vector_ops.h"],
+  deps = [
+    "@eigen",
+  ]
+)
+
+cc_library(
+  name = "color_ops",
+  srcs = ["color_ops.cc"],
+  hdrs = ["color_ops.h"],
+  deps = [
+    "@eigen",
+  ],
 )
 
 cc_test(
@@ -12,4 +24,27 @@ cc_test(
   deps = [
     ":vector_ops",
   ]
+)
+
+cc_library(
+  name = "transformations",
+  srcs = ["transformations.cc"],
+  hdrs = ["transformations.h"],
+  deps = [
+    "@eigen",
+  ]
+)
+
+cc_test(
+  name = "transformations_test",
+  srcs = ["transformations_test.cc"],
+  deps = [
+    ":transformations",
+  ],
+)
+
+cc_library(
+  name = "math_ops",
+  srcs = ["math_ops.cc"],
+  hdrs = ["math_ops.h"],
 )

@@ -1,13 +1,11 @@
 package(default_visibility=["//visibility:public"])
 
-
 cc_library(
   name = "heap",
   srcs = [heap.cc],
   hdrs = ["heap.h"],
 
 )
-
 
 cc_test(
   name = "heap_test",
