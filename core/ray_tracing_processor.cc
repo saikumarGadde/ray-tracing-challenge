@@ -175,10 +175,7 @@ Eigen::Matrix4f ViewTransformation(Eigen::Vector4f from, Eigen::Vector4f to,
 
 void Render(struct Camera camera, World world, struct Canvas* canvas) {
   // Uses the camera to render an image of the given world
-  std::cout << " H size is : " << camera.h_size
-            << " camera v size is :: " << camera.v_size << std::endl;
-  //
-  std::cout << " Debug 8.0 " << std::endl;
+
   for (int y = 0; y < camera.v_size; y++) {
     for (int x = 0; x < camera.h_size; x++) {
       struct Ray ray = RayToPixel(camera, x, y);
@@ -191,60 +188,4 @@ void Render(struct Camera camera, World world, struct Canvas* canvas) {
     }
   }
   std::cout << " Render completed/" << std::endl;
-}
-
-// Shade hit function
-Eigen::Vector3f ShadeHit(World world, struct Comps comps) {
-  return Lighting(comps.object.sphere.material, world.light, comps.point,
-                  comps.eyev, comps.normalv);
-}
-
-// Color At function
-Eigen::Vector3f ColorAt(World& world, struct Ray ray) {
-  // Step 1 Intersect World function
-  std::vector<struct Intersection*> intersections = IntersectWorld(ray, world);
-
-  // Obtain the hit for the ray
-  struct Intersection* hit = Hit(&intersections[0], intersections.size());
-  //
-  if (hit == nullptr) {
-    return Color(0, 0, 0);
-  } else {
-    struct Comps comps = PrepareComputations(*hit, ray);
-    return ShadeHit(world, comps);
-  }
-}
-
-// Preapare computation
-struct Comps PrepareComputations(struct Intersection intersection,
-                                 struct Ray ray) {
-  struct Comps comps;
-  comps.t = intersection.t;
-  // Intersection Object
-  comps.object = intersection.object;
-
-  comps.point = Position(ray, comps.t);
-  comps.eyev = -ray.direction;
-  comps.normalv = NormalAt(comps.object.sphere, comps.point);
-
-  if (comps.normalv.dot(comps.eyev) < 0) {
-    comps.inside = true;
-    comps.normalv = -comps.normalv;
-  } else {
-    comps.inside = false;
-  }
-  return comps;
-}
-
-// Method to intersect the ray and the world
-std::vector<struct Intersection*> IntersectWorld(struct Ray ray, World world) {
-  std::vector<struct Intersection*> intersections;
-  for (int i = 0; i < world.objects.size(); i++) {
-    std::vector<struct Intersection*> intersection =
-        Intersect(ray, world.objects[i].sphere);
-    for (int j = 0; j < intersection.size(); j++) {
-      intersections.push_back(intersection[j]);
-    }
-  }
-  return intersections;
 }

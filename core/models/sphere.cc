@@ -2,7 +2,7 @@
 
 Eigen::Vector4f Sphere::NormalAt(Eigen::Vector4f point) {
   //
-  Eigen::Vector4f normal_vector = point - center_;
+  Eigen::Vector4f normal_vector = point - GetCenter();
   normal_vector = Normalization(normal_vector);
   return normal_vector;
 }

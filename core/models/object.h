@@ -18,9 +18,7 @@ struct Object {
     object_type = ObjectType::RANDOM;
   }
 
-  Object(struct Sphere sphere_) : sphere(sphere_) {
-    object_type = ObjectType::SPHERE;
-  }
-  struct Sphere sphere;
+  Object(Sphere sphere_) : sphere(sphere_) { object_type = ObjectType::SPHERE; }
+  Sphere sphere;
   ObjectType object_type;
 };

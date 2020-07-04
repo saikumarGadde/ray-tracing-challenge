@@ -44,43 +44,14 @@ void Chapter6Task(float canvas_pixels, float wall_size, float wall_z,
   CanvasToPPM(canvas, canvas_file_path.c_str());
 }
 
-struct Comps {
-  // Object of intersection
-  struct Object object;
-  // Intersection at a distance
-  float t;
-  // Precomputations
-  Eigen::Vector4f point;
-  // Eye vector
-  Eigen::Vector4f eyev;
-  // Normal Vecotr to the plane
-  Eigen::Vector4f normalv;
-  // The light is Inside the object or outside the object
-  bool inside;
-};
-
 // Prepare computations
-struct Comps PrepareComputations(struct Intersection intersection,
-                                 struct Ray ray);
 
 // Shade hit function
 Eigen::Vector3f ShadeHit(World world, struct Comps comps);
 
-// Returns the color ar an intersection point of the ray and the world
-Eigen::Vector3f ColorAt(World& world, struct Ray ray);
-
 // Transformation matrix for the camera
 Eigen::Matrix4f ViewTransformation(Eigen::Vector4f from, Eigen::Vector4f to,
                                    Eigen::Vector4f up);
-
-// Method to intersect the ray and the world
-std::vector<struct Intersection*> IntersectWorld(struct Ray ray, World world);
-
-// Lighting function
-Eigen::Vector3f Lighting(struct Material material,
-                         struct PointLight point_light,
-                         Eigen::Vector4f eye_position, Eigen::Vector4f eyev,
-                         Eigen::Vector4f normalv);
 
 // Ray for Pixel
 struct Ray RayToPixel(struct Camera camera, float px, float py);

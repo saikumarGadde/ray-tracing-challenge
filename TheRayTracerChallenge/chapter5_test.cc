@@ -44,7 +44,7 @@ TEST(Chapter5Test, TestBasics) {
 TEST(Chapter5Test, TestIntersection) {
   //
   Ray ray(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
-  struct Sphere sphere;
+  Sphere sphere;
   struct Object sphere_object(sphere);
   ray.IntersectObject(sphere_object);
   std::vector<struct Intersection*>& intersections = ray.GetIntersections();
@@ -81,46 +81,53 @@ TEST(Chapter5Test, TestIntersection) {
   EXPECT_EQ(intersections5[1]->t_, -4.0f);
 };
 
-// TEST(Chapter5Test, TestTrackingIntersections) {
-//   // Tests tracking intersections
-//   struct Sphere sphere;
-//   // Create a data structure of an Intersection
-//   struct Intersection intersection(3.5, sphere);
-//   // Assertions
-//   EXPECT_EQ(intersection.t, 3.5f);
-//   EXPECT_EQ(intersection.sphere.center, sphere.center);
-//   EXPECT_EQ(intersection.sphere.radius, sphere.radius);
+TEST(Chapter5Test, TestTrackingIntersections) {
+  // Tests tracking intersections
+  Sphere sphere;
+  // Create a data structure of an Intersection
+  struct Object sphere_object(sphere);
+  struct Intersection intersection(3.5, sphere_object);
+  // Assertions
+  EXPECT_EQ(intersection.GetT(), 3.5f);
+  EXPECT_EQ(intersection.GetObject().sphere.GetCenter(), sphere.GetCenter());
+  EXPECT_EQ(intersection.GetObject().sphere.GetRadius(), sphere.GetRadius());
 
-//   // Test 1
-//   struct Intersection i1(1, sphere);
-//   struct Intersection i2(1, sphere);
-//   struct Intersection* intersections[2] = {&i1, &i2};
-//   struct Intersection* result = Hit(intersections, 2);
-//   EXPECT_EQ(result, &i1);
+  // Test 1
+  struct Intersection i1(1, sphere_object);
+  struct Intersection i2(1, sphere_object);
+  Ray ray1(Point1Dim(0, 0, 0), Vector1Dim(1, 1, 1));
+  ray1.AddIntersection(&i1);
+  ray1.AddIntersection(&i2);
+  EXPECT_EQ(ray1.PopIntersection(), &i1);
 
-//   // Test 2
-//   struct Intersection i3(-1, sphere);
-//   struct Intersection i4(1, sphere);
-//   struct Intersection* intersections2[2] = {&i3, &i4};
-//   struct Intersection* result2 = Hit(intersections2, 2);
-//   EXPECT_EQ(result2, &i4);
+  // Test 2
+  struct Intersection i3(-1, sphere_object);
+  struct Intersection i4(1, sphere_object);
+  Ray ray2(Point1Dim(0, 0, 0), Vector1Dim(1, 1, 1));
+  ray2.AddIntersection(&i3);
+  ray2.AddIntersection(&i4);
+  EXPECT_EQ(ray2.PopIntersection(), &i4);
 
-//   // Test 4
-//   struct Intersection i5(-2, sphere);
-//   struct Intersection i6(-1, sphere);
-//   struct Intersection* intersections3[2] = {&i5, &i6};
-//   struct Intersection* result3 = Hit(intersections3, 2);
-//   EXPECT_EQ(result3, nullptr);
+  // Test 4
+  struct Intersection i5(-2, sphere);
+  struct Intersection i6(-1, sphere);
+  Ray ray3(Point1Dim(0, 0, 0), Vector1Dim(1, 1, 1));
+  ray3.AddIntersection(&i5);
+  ray3.AddIntersection(&i6);
+  EXPECT_EQ(ray3.PopIntersection(), nullptr);
 
-//   // Test 5
-//   struct Intersection i7(5, sphere);
-//   struct Intersection i8(7, sphere);
-//   struct Intersection i9(-3, sphere);
-//   struct Intersection i10(2, sphere);
-//   struct Intersection* intersections4[4] = {&i7, &i8, &i9, &i10};
-//   struct Intersection* result4 = Hit(intersections4, 4);
-//   EXPECT_EQ(result4, &i10);
-// };
+  // Test 5
+  struct Intersection i7(5, sphere);
+  struct Intersection i8(7, sphere);
+  struct Intersection i9(-3, sphere);
+  struct Intersection i10(2, sphere);
+  Ray ray4(Point1Dim(0, 0, 0), Vector1Dim(1, 1, 1));
+  ray4.AddIntersection(&i7);
+  ray4.AddIntersection(&i9);
+  ray4.AddIntersection(&i8);
+  ray4.AddIntersection(&i10);
+  EXPECT_EQ(ray4.PopIntersection(), &i10);
+};
 
 TEST(Chapter5Test, TestTransformations) {
   // Test : Translating a ray
@@ -139,7 +146,7 @@ TEST(Chapter5Test, TestTransformations) {
 
 TEST(Chapter5Test, SphereTransformationsTest) {
   // Test :
-  struct Sphere sphere;
+  Sphere sphere;
   Eigen::Matrix4f identity_matrix = Eigen::Matrix4f::Identity();
   EXPECT_EQ(sphere.GetTransform(), identity_matrix);
 

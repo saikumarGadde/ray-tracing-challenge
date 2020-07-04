@@ -1,12 +1,5 @@
 #include "core/models/vector.h"
 
-Eigen::Vector3f Color(float r, float g, float b) {
-  Eigen::Vector3f color;
-  color(0) = r;
-  color(1) = g;
-  color(2) = b;
-}
-
 Eigen::Vector4f Point1Dim(float x, float y, float z) {
   Eigen::Vector4f point;
   point << x, y, z, 1.0f;
