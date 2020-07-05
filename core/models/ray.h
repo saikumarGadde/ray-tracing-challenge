@@ -50,6 +50,9 @@ class Ray {
   Ray(Eigen::Vector4f origin, Eigen::Vector4f direction)
       : origin_(origin), direction_(direction) {}
 
+  // Empty constructor
+  Ray() {}
+
   // Position at a distance along the ray
   Eigen::Vector4f Position(const float distance) const;
 
@@ -65,8 +68,14 @@ class Ray {
   // Return origin
   Eigen::Vector4f GetOrigin() { return origin_; }
 
+  // Sets origin of the ray vector
+  void SetOrigin(Eigen::Vector4f origin) { origin_ = origin; }
+
   // Return direction
   Eigen::Vector4f GetDirection() { return direction_; }
+
+  // Sets direction of the ray vector
+  void SetDirection(Eigen::Vector4f direction) { direction_ = direction; }
 
   // Get Intersections
   std::vector<struct Intersection*>& GetIntersections() {

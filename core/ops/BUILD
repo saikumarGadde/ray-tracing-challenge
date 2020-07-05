@@ -32,6 +32,7 @@ cc_library(
   hdrs = ["transformations.h"],
   deps = [
     "@eigen",
+    "//core/ops:vector_ops",
   ]
 )
 

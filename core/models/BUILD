@@ -9,6 +9,17 @@ cc_library(
 )
 
 cc_library(
+  name = "camera",
+  srcs = ["camera.cc"],
+  hdrs = ["camera.h"],
+  deps = [
+    "@eigen",
+    "//core/models:ray",
+    "//core/ops:vector_ops",
+  ],
+)
+
+cc_library(
   name = "object",
   hdrs = ["object.h"],
   deps = [

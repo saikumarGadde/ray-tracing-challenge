@@ -12,6 +12,7 @@ cc_library(
     "//core/models:freq_models",
     "//core/models:ray",
     "//core/models:light",
+    "//core/models:camera",
     "@eigen",
   ]
 )
@@ -78,5 +79,6 @@ cc_test(
   copts = ["-Iexternal/gtest/include"],
   deps = [
     ":libs",
+    "//core:ray_tracing_processor",
   ],
 )

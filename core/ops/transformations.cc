@@ -55,3 +55,20 @@ Eigen::Matrix4f Shearing(float x_y, float x_z, float y_x, float y_z, float z_x,
   shearing_matrix(2, 1) = z_y;
   return shearing_matrix;
 }
+
+Eigen::Matrix4f ViewTransformation(Eigen::Vector4f from, Eigen::Vector4f to,
+                                   Eigen::Vector4f up) {
+  Eigen::Vector4f forward = Normalization(to - from);
+  // Eigen::Vector4f normalized_up = Normalization(up);
+
+  Eigen::Vector4f left = CrossProduct4f(forward, Normalization(up));
+  Eigen::Vector4f true_up = CrossProduct4f(left, forward);
+  //
+  Eigen::Matrix4f orientation;
+  orientation << left(0), left(1), left(2), 0.0f, true_up(0), true_up(1),
+      true_up(2), 0.0f, -forward(0), -forward(1), -forward(2), 0.0f, 0.0f, 0.0f,
+      0.0f, 1.0f;
+  Eigen::Matrix4f transformation_matrix =
+      orientation * Translation(-from(0), -from(1), -from(2));
+  return transformation_matrix;
+}

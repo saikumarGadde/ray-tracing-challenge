@@ -1,7 +1,12 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
+#include "core/models/camera.h"
 #include "core/models/ray.h"
 #include "core/models/world.h"
+#include "core/ops/transformations.h"
+#include "core/ops/vector_ops.h"
+#include "core/ray_tracing_processor.h"
+#include "core/visual/canvas.h"
 #include "gtest/gtest.h"
 
 TEST(Chapter7Test, TestWorld) {
@@ -57,139 +62,137 @@ TEST(Chapter7Test, TestWorld) {
   EXPECT_NEAR(c(2), 0.90498, 0.00001);
 };
 
-// TEST(Chapter7Test, TestWorld2) {
-//   // @TEST1
-//   World world;
-//   struct Ray ray(Point1Dim(0, 0, -5), Vector1Dim(0, 1, 0));
-//   Eigen::Vector3f color = ColorAt(world, ray);
-//   EXPECT_NEAR(color(0), 0.0f, 0.00001);
-//   EXPECT_NEAR(color(1), 0.0f, 0.00001);
-//   EXPECT_NEAR(color(2), 0.0f, 0.00001);
+TEST(Chapter7Test, TestWorld2) {
+  // @TEST1
+  World world;
+  Ray ray(Point1Dim(0, 0, -5), Vector1Dim(0, 1, 0));
+  Eigen::Vector3f color = ray.ColorAt(world);
+  EXPECT_NEAR(color(0), 0.0f, 0.00001);
+  EXPECT_NEAR(color(1), 0.0f, 0.00001);
+  EXPECT_NEAR(color(2), 0.0f, 0.00001);
 
-//   // @TEST2
-//   struct Ray ray2(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
-//   color = ColorAt(world, ray2);
-//   EXPECT_NEAR(color(0), 0.38066f, 0.00001);
-//   EXPECT_NEAR(color(1), 0.47583f, 0.00001);
-//   EXPECT_NEAR(color(2), 0.2855f, 0.00001);
+  // @TEST2
+  Ray ray2(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
+  color = ray2.ColorAt(world);
+  EXPECT_NEAR(color(0), 0.38066f, 0.00001);
+  EXPECT_NEAR(color(1), 0.47583f, 0.00001);
+  EXPECT_NEAR(color(2), 0.2855f, 0.00001);
 
-//   // @TEST3
-//   world.objects[0].sphere.material.ambient = 1;
-//   world.objects[1].sphere.material.ambient = 1;
-//   struct Ray ray3(Point1Dim(0, 0, 0.75), Vector1Dim(0, 0, -1));
-//   color = ColorAt(world, ray3);
-//   Eigen::Vector3f inner_sphere_color =
-//       world.objects[0].sphere.material.rgb_color;
-//   EXPECT_NEAR(color(0), inner_sphere_color(0), 0.00001);
-//   EXPECT_NEAR(color(1), inner_sphere_color(1), 0.00001);
-//   EXPECT_NEAR(color(2), inner_sphere_color(2), 0.00001);
-// };
+  // @TEST3
+  world.GetObjects()[0].sphere.GetMaterial().ambient = 1;
+  world.GetObjects()[1].sphere.GetMaterial().ambient = 1;
+  Ray ray3(Point1Dim(0, 0, 0.75), Vector1Dim(0, 0, -1));
+  color = ray3.ColorAt(world);
+  Eigen::Vector3f inner_sphere_color =
+      world.GetObjects()[0].sphere.GetMaterial().rgb_color;
+  EXPECT_NEAR(color(0), inner_sphere_color(0), 0.00001);
+  EXPECT_NEAR(color(1), inner_sphere_color(1), 0.00001);
+  EXPECT_NEAR(color(2), inner_sphere_color(2), 0.00001);
+};
 
-// TEST(Chapter7upTest, TestWorld3) {
-//   //
-//   Eigen::Matrix4f t = ViewTransformation(
-//       Point1Dim(0, 0, 0), Point1Dim(0, 0, -1), Vector1Dim(0, 1, 0));
-//   EXPECT_TRUE(t == Eigen::Matrix4f::Identity());
+TEST(Chapter7upTest, TestWorld3) {
+  //
+  Eigen::Matrix4f t = ViewTransformation(
+      Point1Dim(0, 0, 0), Point1Dim(0, 0, -1), Vector1Dim(0, 1, 0));
+  EXPECT_TRUE(t == Eigen::Matrix4f::Identity());
 
-//   //
-//   t = ViewTransformation(Point1Dim(0, 0, 0), Point1Dim(0, 0, 1),
-//                          Vector1Dim(0, 1, 0));
-//   EXPECT_TRUE(t == Scaling(-1, 1, -1));
+  //
+  t = ViewTransformation(Point1Dim(0, 0, 0), Point1Dim(0, 0, 1),
+                         Vector1Dim(0, 1, 0));
+  EXPECT_TRUE(t == Scaling(-1, 1, -1));
 
-//   Eigen::Vector4f vec1 = Vector1Dim(1, 2, 3);
-//   Eigen::Vector4f vec2 = Vector1Dim(2, 3, 4);
-//   Eigen::Vector4f cross_result = CrossProduct4f(vec1, vec2);
-//   EXPECT_FLOAT_EQ(cross_result(0), -1.0f);
-//   EXPECT_FLOAT_EQ(cross_result(1), 2.0f);
-//   EXPECT_FLOAT_EQ(cross_result(2), -1.0f);
-//   EXPECT_FLOAT_EQ(cross_result(3), 0.0f);
-//   cross_result = CrossProduct4f(vec2, vec1);
-//   EXPECT_FLOAT_EQ(cross_result(0), 1.0f);
-//   EXPECT_FLOAT_EQ(cross_result(1), -2.0f);
-//   EXPECT_FLOAT_EQ(cross_result(2), 1.0f);
-//   EXPECT_FLOAT_EQ(cross_result(3), 0.0f);
-//   //
-//   t = ViewTransformation(Point1Dim(0, 0, 8), Point1Dim(0, 0, 0),
-//                          Vector1Dim(0, 1, 0));
-//   std::cout << "translation is " << t << std::endl;
-//   std::cout << "translation is " << Translation(0, 0, -8) << std::endl;
-//   EXPECT_TRUE(t == Translation(0, 0, -8));
+  Eigen::Vector4f vec1 = Vector1Dim(1, 2, 3);
+  Eigen::Vector4f vec2 = Vector1Dim(2, 3, 4);
+  Eigen::Vector4f cross_result = CrossProduct4f(vec1, vec2);
+  EXPECT_FLOAT_EQ(cross_result(0), -1.0f);
+  EXPECT_FLOAT_EQ(cross_result(1), 2.0f);
+  EXPECT_FLOAT_EQ(cross_result(2), -1.0f);
+  EXPECT_FLOAT_EQ(cross_result(3), 0.0f);
+  cross_result = CrossProduct4f(vec2, vec1);
+  EXPECT_FLOAT_EQ(cross_result(0), 1.0f);
+  EXPECT_FLOAT_EQ(cross_result(1), -2.0f);
+  EXPECT_FLOAT_EQ(cross_result(2), 1.0f);
+  EXPECT_FLOAT_EQ(cross_result(3), 0.0f);
+  //
+  t = ViewTransformation(Point1Dim(0, 0, 8), Point1Dim(0, 0, 0),
+                         Vector1Dim(0, 1, 0));
+  EXPECT_TRUE(t == Translation(0, 0, -8));
 
-//   //
-//   t = ViewTransformation(Point1Dim(1, 3, 2), Point1Dim(4, -2, 8),
-//                          Vector1Dim(1, 1, 0));
-//   EXPECT_NEAR(t(0, 0), -0.50709, 0.00001);
-//   EXPECT_NEAR(t(0, 1), 0.50709, 0.00001);
-//   EXPECT_NEAR(t(0, 2), 0.67612, 0.00001);
-//   EXPECT_NEAR(t(0, 3), -2.36643, 0.00001);
-//   EXPECT_NEAR(t(1, 0), 0.76772, 0.00001);
-//   EXPECT_NEAR(t(1, 1), 0.60609, 0.00001);
-//   EXPECT_NEAR(t(1, 2), 0.12122, 0.00001);
-//   EXPECT_NEAR(t(1, 3), -2.82843, 0.00001);
-//   EXPECT_NEAR(t(2, 0), -0.35857, 0.00001);
-//   EXPECT_NEAR(t(2, 1), 0.59761, 0.00001);
-//   EXPECT_NEAR(t(2, 2), -0.71714, 0.00001);
-//   EXPECT_NEAR(t(2, 3), 0.0f, 0.00001);
-//   EXPECT_NEAR(t(3, 0), 0.0f, 0.00001);
-//   EXPECT_NEAR(t(3, 1), 0.0f, 0.00001);
-//   EXPECT_NEAR(t(3, 2), 0.0f, 0.00001);
-//   EXPECT_NEAR(t(3, 3), 1.0f, 0.00001);
-// };
+  //
+  t = ViewTransformation(Point1Dim(1, 3, 2), Point1Dim(4, -2, 8),
+                         Vector1Dim(1, 1, 0));
+  EXPECT_NEAR(t(0, 0), -0.50709, 0.00001);
+  EXPECT_NEAR(t(0, 1), 0.50709, 0.00001);
+  EXPECT_NEAR(t(0, 2), 0.67612, 0.00001);
+  EXPECT_NEAR(t(0, 3), -2.36643, 0.00001);
+  EXPECT_NEAR(t(1, 0), 0.76772, 0.00001);
+  EXPECT_NEAR(t(1, 1), 0.60609, 0.00001);
+  EXPECT_NEAR(t(1, 2), 0.12122, 0.00001);
+  EXPECT_NEAR(t(1, 3), -2.82843, 0.00001);
+  EXPECT_NEAR(t(2, 0), -0.35857, 0.00001);
+  EXPECT_NEAR(t(2, 1), 0.59761, 0.00001);
+  EXPECT_NEAR(t(2, 2), -0.71714, 0.00001);
+  EXPECT_NEAR(t(2, 3), 0.0f, 0.00001);
+  EXPECT_NEAR(t(3, 0), 0.0f, 0.00001);
+  EXPECT_NEAR(t(3, 1), 0.0f, 0.00001);
+  EXPECT_NEAR(t(3, 2), 0.0f, 0.00001);
+  EXPECT_NEAR(t(3, 3), 1.0f, 0.00001);
+};
 
-// TEST(Chapter7Test, ImplementingACameraTest) {
-//   // Test 1
-//   struct Camera camera(160, 120, M_PI / 2.0);
-//   EXPECT_EQ(camera.h_size, 160);
-//   EXPECT_EQ(camera.v_size, 120);
-//   EXPECT_FLOAT_EQ(camera.field_of_view, M_PI / 2.0);
-//   EXPECT_TRUE(camera.transform == Eigen::Matrix4f::Identity());
+TEST(Chapter7Test, ImplementingACameraTest) {
+  // Test 1
+  Camera camera(160, 120, M_PI / 2.0);
+  EXPECT_EQ(camera.h_size_, 160);
+  EXPECT_EQ(camera.v_size_, 120);
+  EXPECT_FLOAT_EQ(camera.field_of_view_, M_PI / 2.0);
+  EXPECT_TRUE(camera.GetTransform() == Eigen::Matrix4f::Identity());
 
-//   // Test 2
-//   struct Camera camera2(200, 125, M_PI / 2.0);
-//   EXPECT_NEAR(camera2.pixel_size, 0.01, 0.00001);
+  // Test 2
+  Camera camera2(200, 125, M_PI / 2.0);
+  EXPECT_NEAR(camera2.pixel_size_, 0.01, 0.00001);
 
-//   // Test 3
-//   struct Camera camera3(125, 200, M_PI / 2);
-//   EXPECT_NEAR(camera3.pixel_size, 0.01, 0.00001);
+  // Test 3
+  Camera camera3(125, 200, M_PI / 2);
+  EXPECT_NEAR(camera3.pixel_size_, 0.01, 0.00001);
 
-//   // Test 4
-//   struct Camera camera4(201, 101, M_PI / 2.0);
-//   struct Ray ray = RayToPixel(camera4, 100, 50);
-//   EXPECT_TRUE(ray.origin == Point1Dim(0, 0, 0));
-//   EXPECT_NEAR(ray.direction(0), 0.0f, 0.00001f);
-//   EXPECT_NEAR(ray.direction(1), 0.0f, 0.00001f);
-//   EXPECT_NEAR(ray.direction(2), -1.0f, 0.00001f);
+  // Test 4
+  Camera camera4(201, 101, M_PI / 2.0);
+  Ray ray;
+  camera4.RayToPixel(100, 50, &ray);
+  EXPECT_TRUE(ray.GetOrigin() == Point1Dim(0, 0, 0));
+  EXPECT_NEAR(ray.GetDirection()[0], 0.0f, 0.00001f);
+  EXPECT_NEAR(ray.GetDirection()[1], 0.0f, 0.00001f);
+  EXPECT_NEAR(ray.GetDirection()[2], -1.0f, 0.00001f);
 
-//   // Test 5
-//   struct Ray ray2 = RayToPixel(camera4, 0, 0);
-//   EXPECT_TRUE(ray2.origin == Point1Dim(0, 0, 0));
-//   EXPECT_NEAR(ray2.direction(0), 0.66519f, 0.00001);
-//   EXPECT_NEAR(ray2.direction(1), 0.33259f, 0.00001);
-//   EXPECT_NEAR(ray2.direction(2), -0.66851f, 0.00001);
+  // Test 5
+  Ray ray2;
+  camera4.RayToPixel(0, 0, &ray2);
+  EXPECT_TRUE(ray2.GetOrigin() == Point1Dim(0, 0, 0));
+  EXPECT_NEAR(ray2.GetDirection()[0], 0.66519f, 0.00001);
+  EXPECT_NEAR(ray2.GetDirection()[1], 0.33259f, 0.00001);
+  EXPECT_NEAR(ray2.GetDirection()[2], -0.66851f, 0.00001);
 
-//   // Test 6
-//   camera4.transform = RotationY(M_PI / 4) * Translation(0, -2, 5);
-//   struct Ray ray3 = RayToPixel(camera4, 100, 50);
-//   EXPECT_NEAR(ray3.origin(0), 0, 0.0000001);
-//   EXPECT_NEAR(ray3.origin(1), 2, 0.0000001);
-//   EXPECT_NEAR(ray3.origin(2), -5, 0.000001);
-//   EXPECT_NEAR(ray3.direction(0), sqrt(2) / 2.0, 0.00001);
-//   EXPECT_NEAR(ray3.direction(1), 0.0f, 0.00001);
-//   EXPECT_NEAR(ray3.direction(2), -sqrt(2) / 2.0, 0.00001);
-// }
-// ;
+  // Test 6
+  camera4.SetTransform(RotationY(M_PI / 4) * Translation(0, -2, 5));
+  Ray ray3;
+  camera4.RayToPixel(100, 50, &ray3);
+  EXPECT_NEAR(ray3.GetOrigin()[0], 0, 0.0000001);
+  EXPECT_NEAR(ray3.GetOrigin()[1], 2, 0.0000001);
+  EXPECT_NEAR(ray3.GetOrigin()[2], -5, 0.000001);
+  EXPECT_NEAR(ray3.GetDirection()[0], sqrt(2) / 2.0, 0.00001);
+  EXPECT_NEAR(ray3.GetDirection()[1], 0.0f, 0.00001);
+  EXPECT_NEAR(ray3.GetDirection()[2], -sqrt(2) / 2.0, 0.00001);
+};
 
-// TEST(Chapter7Test, RenderFunctionTest) {
-//   // Test Rendering image
-//   World world;
-//   struct Camera camera(11, 11, M_PI / 2.0);
-//   //
-//   camera.transform = ViewTransformation(Point1Dim(0, 0, -5), Point1Dim(0, 0,
-//   0),
-//                                         Vector1Dim(0, 1, 0));
-//   struct Canvas image(11, 11);
-//   Render(camera, world, &image);
-//   EXPECT_NEAR((image.canvas[5][5]).r, 0.38066, 0.00001);
-//   EXPECT_NEAR((image.canvas[5][5]).g, 0.47583, 0.00001);
-//   EXPECT_NEAR((image.canvas[5][5]).b, 0.2855, 0.00001);
-// }
+TEST(Chapter7Test, RenderFunctionTest) {
+  // Test Rendering image
+  World world;
+  Camera camera(11, 11, M_PI / 2.0);
+  camera.SetTransform(ViewTransformation(
+      Point1Dim(0, 0, -5), Point1Dim(0, 0, 0), Vector1Dim(0, 1, 0)));
+  Canvas image(11, 11);
+  Render(camera, world, &image);
+  EXPECT_NEAR(image.GetPixel(5, 5)[0], 0.38066, 0.00001);
+  EXPECT_NEAR(image.GetPixel(5, 5)[1], 0.47583, 0.00001);
+  EXPECT_NEAR(image.GetPixel(5, 5)[2], 0.2855, 0.00001);
+}
