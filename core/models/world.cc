@@ -1,6 +1,6 @@
 #include "core/models/world.h"
 
-void World::AddObject(struct Object object) {
+void World::AddObject(Object object) {
   // Add objects to the class
   objects_.push_back(object);
 }
@@ -11,7 +11,7 @@ void World::AddLight(struct PointLight point_light) {
 }
 
 // Get the objects present in the world
-std::vector<struct Object>& World::GetObjects() {
+std::vector<Object>& World::GetObjects() {
   // Return the objects present in the world
   return objects_;
 }

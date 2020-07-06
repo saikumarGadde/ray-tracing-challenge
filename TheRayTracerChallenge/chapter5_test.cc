@@ -1,5 +1,6 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
+#include "core/models/object_type.h"
 #include "core/models/ray.h"
 #include "core/models/vector.h"
 #include "core/ops/transformations.h"
@@ -44,8 +45,8 @@ TEST(Chapter5Test, TestBasics) {
 TEST(Chapter5Test, TestIntersection) {
   //
   Ray ray(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
-  Sphere sphere;
-  struct Object sphere_object(sphere);
+
+  Object sphere_object(object_type::ObjectType::SPHERE);
   ray.IntersectObject(sphere_object);
   std::vector<struct Intersection*>& intersections = ray.GetIntersections();
   EXPECT_EQ(intersections[0]->t_, 4.0f);
@@ -83,44 +84,42 @@ TEST(Chapter5Test, TestIntersection) {
 
 TEST(Chapter5Test, TestTrackingIntersections) {
   // Tests tracking intersections
-  Sphere sphere;
-  // Create a data structure of an Intersection
-  struct Object sphere_object(sphere);
-  struct Intersection intersection(3.5, sphere_object);
+  Object sphere_object(object_type::ObjectType::SPHERE);
+  struct Intersection intersection(3.5, &sphere_object);
   // Assertions
   EXPECT_EQ(intersection.GetT(), 3.5f);
-  EXPECT_EQ(intersection.GetObject().sphere.GetCenter(), sphere.GetCenter());
-  EXPECT_EQ(intersection.GetObject().sphere.GetRadius(), sphere.GetRadius());
+  EXPECT_EQ(intersection.GetObject()->GetCenter(), sphere_object.GetCenter());
+  EXPECT_EQ(intersection.GetObject()->GetRadius(), sphere_object.GetRadius());
 
   // Test 1
-  struct Intersection i1(1, sphere_object);
-  struct Intersection i2(1, sphere_object);
+  struct Intersection i1(1, &sphere_object);
+  struct Intersection i2(1, &sphere_object);
   Ray ray1(Point1Dim(0, 0, 0), Vector1Dim(1, 1, 1));
   ray1.AddIntersection(&i1);
   ray1.AddIntersection(&i2);
   EXPECT_EQ(ray1.PopIntersection(), &i1);
 
   // Test 2
-  struct Intersection i3(-1, sphere_object);
-  struct Intersection i4(1, sphere_object);
+  struct Intersection i3(-1, &sphere_object);
+  struct Intersection i4(1, &sphere_object);
   Ray ray2(Point1Dim(0, 0, 0), Vector1Dim(1, 1, 1));
   ray2.AddIntersection(&i3);
   ray2.AddIntersection(&i4);
   EXPECT_EQ(ray2.PopIntersection(), &i4);
 
   // Test 4
-  struct Intersection i5(-2, sphere);
-  struct Intersection i6(-1, sphere);
+  struct Intersection i5(-2, &sphere_object);
+  struct Intersection i6(-1, &sphere_object);
   Ray ray3(Point1Dim(0, 0, 0), Vector1Dim(1, 1, 1));
   ray3.AddIntersection(&i5);
   ray3.AddIntersection(&i6);
   EXPECT_EQ(ray3.PopIntersection(), nullptr);
 
   // Test 5
-  struct Intersection i7(5, sphere);
-  struct Intersection i8(7, sphere);
-  struct Intersection i9(-3, sphere);
-  struct Intersection i10(2, sphere);
+  struct Intersection i7(5, &sphere_object);
+  struct Intersection i8(7, &sphere_object);
+  struct Intersection i9(-3, &sphere_object);
+  struct Intersection i10(2, &sphere_object);
   Ray ray4(Point1Dim(0, 0, 0), Vector1Dim(1, 1, 1));
   ray4.AddIntersection(&i7);
   ray4.AddIntersection(&i9);
@@ -133,27 +132,29 @@ TEST(Chapter5Test, TestTransformations) {
   // Test : Translating a ray
   Ray ray(Point1Dim(1, 2, 3), Vector1Dim(0, 1, 0));
   // Translation matrix
-  ray.SetTransform(Translation(3, 4, 5));
+  Eigen::Matrix4f translation_matrix = Translation(3, 4, 5);
+  ray.SetTransform(translation_matrix);
   EXPECT_TRUE(ray.GetOrigin() == Point1Dim(4, 6, 8));
   EXPECT_TRUE(ray.GetDirection() == Vector1Dim(0, 1, 0));
 
   // Test: Scaling a ray
   Ray ray2(Point1Dim(1, 2, 3), Vector1Dim(0, 1, 0));
-  ray2.SetTransform(Scaling(2, 3, 4));
+  Eigen::Matrix4f scaling_matrix = Scaling(2, 3, 4);
+  ray2.SetTransform(scaling_matrix);
   EXPECT_TRUE(ray2.GetOrigin() == Point1Dim(2, 6, 12));
   EXPECT_TRUE(ray2.GetDirection() == Vector1Dim(0, 3, 0));
 };
 
 TEST(Chapter5Test, SphereTransformationsTest) {
   // Test :
-  Sphere sphere;
+  Object sphere_object(object_type::ObjectType::SPHERE);
   Eigen::Matrix4f identity_matrix = Eigen::Matrix4f::Identity();
-  EXPECT_EQ(sphere.GetTransform(), identity_matrix);
+  EXPECT_EQ(sphere_object.GetTransform(), identity_matrix);
 
   // Testing the transformation of the ray using sphere.transform
   Ray ray(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
-  sphere.SetTransform(Scaling(2, 2, 2));
-  struct Object sphere_object(sphere);
+  Eigen::Matrix4f scaling_matrix = Scaling(2, 2, 2);
+  sphere_object.SetTransform(scaling_matrix);
   ray.IntersectObject(sphere_object);
   std::vector<struct Intersection*>& intersections = ray.GetIntersections();
   EXPECT_EQ(intersections[0]->t_, 3.0f);
@@ -161,9 +162,9 @@ TEST(Chapter5Test, SphereTransformationsTest) {
 
   // Testing method 2
   ray.ClearIntersections();
-  sphere.SetTransform(Translation(5, 0, 0));
-  struct Object sphere_object2(sphere);
-  ray.IntersectObject(sphere_object2);
+  Eigen::Matrix4f translation_matrix = Translation(5, 0, 0);
+  sphere_object.SetTransform(translation_matrix);
+  ray.IntersectObject(sphere_object);
   std::vector<struct Intersection*>& intersections2 = ray.GetIntersections();
   EXPECT_EQ(intersections2.size(), 0);
 };

@@ -1,24 +1,20 @@
 #pragma once
 #include <Eigen/Core>
 #include <Eigen/Dense>
+#include "core/models/material.h"
 #include "core/models/sphere.h"
 
-// Object type sphere, cone or random
-enum ObjectType {
-  RANDOM = 0,
-  SPHERE = 1,
-  CONE = 2,
-};
-
 // Object struct
-struct Object {
-  Object() {
-    // Set object type to random where the World can contain all types of
-    // objects
-    object_type = ObjectType::RANDOM;
+class Object : public Sphere {
+ public:
+  // Constructor with object type from the above enum ObjectType
+  Object(object_type::ObjectType object_type)
+      : Sphere(object_type), object_type_(object_type) {}
+
+  object_type::ObjectType GetObjectType() {
+    // Return the Object Type
+    return object_type_;
   }
 
-  Object(Sphere sphere_) : sphere(sphere_) { object_type = ObjectType::SPHERE; }
-  Sphere sphere;
-  ObjectType object_type;
+  object_type::ObjectType object_type_;
 };

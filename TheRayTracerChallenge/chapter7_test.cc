@@ -12,7 +12,6 @@
 TEST(Chapter7Test, TestWorld) {
   // TEST 1
   World world;
-
   // TEST 2
   Ray ray(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
   ray.IntersectWorld(world);
@@ -24,8 +23,8 @@ TEST(Chapter7Test, TestWorld) {
   EXPECT_EQ(intersections[3]->GetT(), 6.0f);  // 6.0f
 
   // Test 2
-  Sphere shape;
-  struct Intersection i(4, Object(shape));
+  Object sphere_object(object_type::ObjectType::SPHERE);
+  struct Intersection i(4, &sphere_object);
   struct Comps comps = ray.PrepareComputations(i);
   EXPECT_EQ(comps.point, Point1Dim(0, 0, -1));
   EXPECT_EQ(comps.eyev, Vector1Dim(0, 0, -1));
@@ -34,7 +33,7 @@ TEST(Chapter7Test, TestWorld) {
 
   // Test 3
   Ray ray2(Point1Dim(0, 0, 0), Vector1Dim(0, 0, 1));
-  struct Intersection i2(1, Object(shape));
+  struct Intersection i2(1, &sphere_object);
   comps = ray2.PrepareComputations(i2);
   EXPECT_EQ(comps.point, Point1Dim(0, 0, 1));
   EXPECT_EQ(comps.eyev, Vector1Dim(0, 0, -1));
@@ -43,7 +42,7 @@ TEST(Chapter7Test, TestWorld) {
 
   // TEST 4
   Ray ray3(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
-  struct Intersection i3(4, Object(world.GetObjects()[1]));
+  struct Intersection i3(4, &(world.GetObjects()[1]));
   comps = ray3.PrepareComputations(i3);
   Eigen::Vector3f c = ray3.ShadeHit(world, comps);
   EXPECT_NEAR(c(0), 0.38066, 0.00001);
@@ -54,7 +53,7 @@ TEST(Chapter7Test, TestWorld) {
   Ray ray4(Point1Dim(0, 0, 0), Vector1Dim(0, 0, 1));
   struct PointLight point_light(RGBColor(1, 1, 1), Point1Dim(0, 0.25, 0));
   world.SetLight(point_light, 0);
-  struct Intersection i4(0.5, Object(world.GetObjects()[0]));
+  struct Intersection i4(0.5, &(world.GetObjects()[0]));
   comps = ray4.PrepareComputations(i4);
   c = ray4.ShadeHit(world, comps);
   EXPECT_NEAR(c(0), 0.90498, 0.00001);
@@ -79,12 +78,12 @@ TEST(Chapter7Test, TestWorld2) {
   EXPECT_NEAR(color(2), 0.2855f, 0.00001);
 
   // @TEST3
-  world.GetObjects()[0].sphere.GetMaterial().ambient = 1;
-  world.GetObjects()[1].sphere.GetMaterial().ambient = 1;
+  world.GetObjects()[0].GetMaterial().ambient = 1;
+  world.GetObjects()[1].GetMaterial().ambient = 1;
   Ray ray3(Point1Dim(0, 0, 0.75), Vector1Dim(0, 0, -1));
   color = ray3.ColorAt(world);
   Eigen::Vector3f inner_sphere_color =
-      world.GetObjects()[0].sphere.GetMaterial().rgb_color;
+      world.GetObjects()[0].GetMaterial().rgb_color;
   EXPECT_NEAR(color(0), inner_sphere_color(0), 0.00001);
   EXPECT_NEAR(color(1), inner_sphere_color(1), 0.00001);
   EXPECT_NEAR(color(2), inner_sphere_color(2), 0.00001);
@@ -195,4 +194,4 @@ TEST(Chapter7Test, RenderFunctionTest) {
   EXPECT_NEAR(image.GetPixel(5, 5)[0], 0.38066, 0.00001);
   EXPECT_NEAR(image.GetPixel(5, 5)[1], 0.47583, 0.00001);
   EXPECT_NEAR(image.GetPixel(5, 5)[2], 0.2855, 0.00001);
-}
+};

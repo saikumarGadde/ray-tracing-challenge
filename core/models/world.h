@@ -1,9 +1,7 @@
 #pragma once
 #include <vector>
 #include "core/models/light.h"
-#include "core/models/material.h"
 #include "core/models/object.h"
-#include "core/models/sphere.h"
 #include "core/models/vector.h"
 #include "core/ops/color_ops.h"
 #include "core/ops/transformations.h"
@@ -15,19 +13,17 @@ class World {
   World() {
     // Add First object
     // Set transform of inner sphere
-    Sphere inner_sphere;
+    Object inner_sphere(object_type::ObjectType::SPHERE);
     inner_sphere.SetTransform(Scaling(0.5, 0.5, 0.5));
-    struct Object object1(inner_sphere);
-    AddObject(object1);
+    AddObject(inner_sphere);
 
     // Add second object
     // Set material of outer sphere
-    Sphere outer_sphere;
+    Object outer_sphere(object_type::ObjectType::SPHERE);
     struct Material outer_sphere_material(RGBColor(0.8, 1.0, 0.6), 0.1, 0.7,
                                           0.2, 200.0);
     outer_sphere.SetMaterial(outer_sphere_material);
-    struct Object object2(outer_sphere);
-    AddObject(object2);
+    AddObject(outer_sphere);
 
     struct PointLight light;
     light.SetIntensity(RGBColor(1, 1, 1));
@@ -36,10 +32,10 @@ class World {
   }
 
   // Get objects present in the World
-  std::vector<struct Object>& GetObjects();
+  std::vector<Object>& GetObjects();
 
   // Add an object to the world
-  void AddObject(struct Object object);
+  void AddObject(Object object);
 
   // Add a light to the world
   void AddLight(struct PointLight point_light);
@@ -53,5 +49,5 @@ class World {
   // Point lights present in the world
   std::vector<struct PointLight> point_lights_;
   // Vector of objects in the world
-  std::vector<struct Object> objects_;
+  std::vector<Object> objects_;
 };

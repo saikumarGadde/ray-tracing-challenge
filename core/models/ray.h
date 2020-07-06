@@ -3,35 +3,28 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <vector>
-#include "core/models/light.h"
-#include "core/models/object.h"
 #include "core/models/world.h"
 
 // Intersection of a ray with the other objects in the world
 struct Intersection {
-  // Default constructor
-  Intersection() {}
-
   // Constructor with distance and object
-  Intersection(float t, struct Object object) : t_(t), object_(object) {}
+  Intersection(float t, Object* object) : t_(t), object_(object) {}
 
   float GetT() { return t_; }
 
-  struct Object GetObject() {
-    return object_;
-  }
+  Object* GetObject() { return object_; }
 
   // Object in the Intersection
-  struct Object object_;
+  Object* object_;
   // T value of the intersection
   float t_;
   // Type of the object
-  ObjectType object_type;
+  object_type::ObjectType object_type;
 };
 
 struct Comps {
   // Object of intersection
-  struct Object object;
+  Object* object;
   // Intersection at a distance
   float t;
   // Precomputations
@@ -57,13 +50,18 @@ class Ray {
   Eigen::Vector4f Position(const float distance) const;
 
   // Applies transform to a Ray
-  void SetTransform(Eigen::Matrix4f transformation_matrix);
+  void SetTransform(Eigen::Matrix4f& transformation_matrix);
+
+  // Get Transformed origin and direction of the ray based on the transform
+  // matrix of the object.
+  void GetTransform(Eigen::Matrix4f& transform_matrix, Eigen::Vector4f* origin,
+                    Eigen::Vector4f* direction);
 
   // Intersect a ray with a sphere
-  void IntersectObject(struct Object object);
+  void IntersectObject(Object& object);
 
   // Intersect a ray with a world
-  void IntersectWorld(World world);
+  void IntersectWorld(World& world);
 
   // Return origin
   Eigen::Vector4f GetOrigin() { return origin_; }
@@ -98,7 +96,14 @@ class Ray {
   Eigen::Vector3f ColorAt(World& world);
 
   // Shade Hit function
-  Eigen::Vector3f ShadeHit(World world, struct Comps& comps);
+  Eigen::Vector3f ShadeHit(World& world, struct Comps& comps);
+
+  Eigen::Vector4f Reflect(Eigen::Vector4f in, Eigen::Vector4f normal);
+
+  Eigen::Vector3f Lighting2(struct Material material,
+                            struct PointLight point_light,
+                            Eigen::Vector4f position, Eigen::Vector4f eyev,
+                            Eigen::Vector4f normalv);
 
  private:
   // Origin of the ray
@@ -107,8 +112,4 @@ class Ray {
   Eigen::Vector4f direction_;
   // Intersections of the given ray
   std::vector<struct Intersection*> intersections_;
-  // Get Transformed origin and direction of the ray based on the transform
-  // matrix of the object.
-  void GetTransform(Eigen::Matrix4f transform_matrix, Eigen::Vector4f* origin,
-                    Eigen::Vector4f* direction);
 };

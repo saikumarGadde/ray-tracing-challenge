@@ -35,7 +35,7 @@ struct Material& Sphere::GetMaterial() {
   return material_;
 }
 
-Eigen::Matrix4f Sphere::GetTransform() {
+Eigen::Matrix4f& Sphere::GetTransform() {
   // Return transform of the sphere
   return transform_;
 }

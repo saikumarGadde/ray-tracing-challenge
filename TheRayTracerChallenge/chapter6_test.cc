@@ -1,7 +1,6 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
-#include "core/models/light.h"
-#include "core/models/sphere.h"
+#include "core/models/object.h"
 #include "core/models/vector.h"
 #include "core/ops/color_ops.h"
 #include "core/ops/transformations.h"
@@ -9,28 +8,29 @@
 
 TEST(Chapter6Test, NormalsOnSphere) {
   // Testing normals Test 1
-  Sphere sphere;
-  Eigen::Vector4f normal_vector = sphere.NormalAt(Point1Dim(1, 0, 0));
+
+  Object sphere_object(object_type::ObjectType::SPHERE);
+  Eigen::Vector4f normal_vector = sphere_object.NormalAt(Point1Dim(1, 0, 0));
   EXPECT_EQ(normal_vector[0], 1.0f);
   EXPECT_EQ(normal_vector[1], 0.0f);
   EXPECT_EQ(normal_vector[2], 0.0f);
   EXPECT_EQ(normal_vector[3], 0.0f);
 
   // Test 2
-  normal_vector = sphere.NormalAt(Point1Dim(0, 1, 0));
+  normal_vector = sphere_object.NormalAt(Point1Dim(0, 1, 0));
   EXPECT_EQ(normal_vector[0], 0.0f);
   EXPECT_EQ(normal_vector[1], 1.0f);
   EXPECT_EQ(normal_vector[2], 0.0f);
   EXPECT_EQ(normal_vector[3], 0.0f);
   // Test 3
-  normal_vector = sphere.NormalAt(Point1Dim(0, 0, 1));
+  normal_vector = sphere_object.NormalAt(Point1Dim(0, 0, 1));
   EXPECT_EQ(normal_vector[0], 0.0f);
   EXPECT_EQ(normal_vector[1], 0.0f);
   EXPECT_EQ(normal_vector[2], 1.0f);
   EXPECT_EQ(normal_vector[3], 0.0f);
   // Test 4
-  normal_vector =
-      sphere.NormalAt(Point1Dim(sqrt(3) / 3.0, sqrt(3) / 3.0, sqrt(3) / 3.0));
+  normal_vector = sphere_object.NormalAt(
+      Point1Dim(sqrt(3) / 3.0, sqrt(3) / 3.0, sqrt(3) / 3.0));
   EXPECT_FLOAT_EQ(normal_vector[0], (float)(sqrt(3) / 3.0));
   EXPECT_FLOAT_EQ(normal_vector[1], (float)(sqrt(3) / 3.0));
   EXPECT_FLOAT_EQ(normal_vector[2], (float)(sqrt(3) / 3.0));
@@ -39,7 +39,7 @@ TEST(Chapter6Test, NormalsOnSphere) {
 
 TEST(Chapter6Test, TransformingNormalsTest) {
   // Test 1 to transform normals
-  Sphere sphere;
+  Object sphere(object_type::ObjectType::SPHERE);
   sphere.SetTransform(Translation(0, 1, 0));
   Eigen::Vector4f normal =
       sphere.NormalAtWorldPoint(Point1Dim(0, 1.70711, -0.70711));
@@ -77,7 +77,7 @@ TEST(Chapter6Test, ReflectingVectorsTest) {
 
 TEST(Chapter6Test, PhongReflectionTest) {
   // Test material property in Sphere
-  Sphere sphere;
+  Object sphere(object_type::ObjectType::SPHERE);
 
   EXPECT_EQ(sphere.GetMaterial().ambient, 0.1f);
 

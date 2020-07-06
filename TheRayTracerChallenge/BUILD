@@ -9,10 +9,10 @@ cc_library(
     "//core/visual:canvas",
     "//core/ops:color_ops",
     "//core/ops:transformations",
-    "//core/models:freq_models",
     "//core/models:ray",
     "//core/models:light",
     "//core/models:camera",
+    "//core/models:object",
     "@eigen",
   ]
 )

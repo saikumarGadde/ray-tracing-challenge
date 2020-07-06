@@ -1,42 +1,31 @@
 #pragma once
 #define _USE_MATH_DEFINES
 #include "core/models/material.h"
+#include "core/models/object_type.h"
 #include "core/ops/vector_ops.h"
 
 // Sphere class
 class Sphere {
  public:
-  // Constructor of the Sphere with a center, radius, transform and material
-  Sphere(Eigen::Vector4f center, float radius, Eigen::Matrix4f transform,
-         struct Material material)
-      : center_(center),
-        radius_(radius),
-        transform_(transform),
-        material_(material) {}
-
-  Sphere() {
-    center_ << 0.0f, 0.0f, 0.0f, 1.0f;
-    radius_ = 1;
-    transform_ = Eigen::Matrix4f::Identity();
+  Sphere(object_type::ObjectType object_type) {
+    if (object_type == object_type::ObjectType::SPHERE) {
+      // Initialize a new sphere
+      center_ << 0.0f, 0.0f, 0.0f, 1.0f;
+      radius_ = 1;
+      transform_ = Eigen::Matrix4f::Identity();
+    }
   }
 
-  // Sets transform matrix of the sphere
+  // Setters
+  void SetCenter(Eigen::Vector4f center);
+  void SetRadius(float radius);
   void SetTransform(Eigen::Matrix4f transform_matrix);
-
-  // Sets Material object of the sphere
   void SetMaterial(struct Material material);
-
-  // Gets Material of the Sphere
-  struct Material& GetMaterial();
-
-  // Gets Transform of the sphere
-  Eigen::Matrix4f GetTransform();
-
-  // Gets Center of the sphere
+  // Getters
   Eigen::Vector4f GetCenter();
-
-  // Gets radius of the sphere
   float GetRadius();
+  Eigen::Matrix4f& GetTransform();
+  struct Material& GetMaterial();
 
   // Calculate Normat at a given point on a sphere
   Eigen::Vector4f NormalAt(Eigen::Vector4f point);
