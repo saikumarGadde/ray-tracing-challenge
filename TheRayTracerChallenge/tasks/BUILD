@@ -12,3 +12,16 @@ cc_binary(
     "//core/models:world",
   ]
 )
+
+cc_binary(
+  name = "chapter6_task",
+  srcs = ["chapter6_task.cc"],
+  deps = [
+    "//core/ops:color_ops",
+    "//core/visual:canvas",
+    "//core/models:vector",
+    "//core/ops:vector_ops",
+    "//core/models:ray",
+    "//core/models:world",
+  ]
+)

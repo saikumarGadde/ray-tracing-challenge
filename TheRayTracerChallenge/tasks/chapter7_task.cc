@@ -1,7 +1,6 @@
 #include <vector>
 
 void Chapter7Task(std::string canvas_file_path) {
-  std::cout << "Debug 1.0" << std::endl;
   // Floor
   struct Sphere floor;
   floor.transform = Scaling(10, 0.01, 10);
