@@ -14,12 +14,11 @@ void Canvas::CanvasToPPM(const char ppm_file_path[]) {
   // Open a PPM File
   FILE* fp = fopen(ppm_file_path, "w");
   // Write header to the PPM File
-  fprintf(fp, "P3\n%d %d\n255\n", height_, width_);
-
+  fprintf(fp, "P3\n%d %d\n255\n", GetWidth(), GetHeight());
   int r, g, b;
   int count = 0;
-  for (int y = 0; y < height_; y++) {
-    for (int x = 0; x < width_; x++) {
+  for (int y = 0; y < GetHeight(); y++) {
+    for (int x = 0; x < GetWidth(); x++) {
       Eigen::Vector3f pixel_color = canvas_[y][x];
       r = std::max(0, std::min((int)(pixel_color(0) * 255), 255));
       g = std::max(0, std::min((int)(pixel_color(1) * 255), 255));

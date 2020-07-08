@@ -18,6 +18,8 @@ struct PointLight {
  public:
   PointLight(Eigen::Vector3f intensity, Eigen::Vector4f point)
       : intensity_(intensity), point_(point) {}
+
+  // Empty constructor
   PointLight() {}
 
   void SetIntensity(Eigen::Vector3f intensity) {

@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
   // Wall location on the z axis
   float wall_z = 10;
   // Path of the canvas file
-  std::string canvas_file_path = "/Users/gaddekumar/Desktop/wow10.ppm";
+  std::string canvas_file_path = "/Users/gaddekumar/Desktop/chapter6.ppm";
 
   Chapter6Task(canvas_pixels, wall_size, wall_z, canvas_file_path);
 }

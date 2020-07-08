@@ -10,26 +10,28 @@
 class World {
  public:
   // Default Constructor for the World
-  World() {
-    // Add First object
-    // Set transform of inner sphere
-    Object inner_sphere(object_type::ObjectType::SPHERE);
-    inner_sphere.SetTransform(Scaling(0.5, 0.5, 0.5));
-    AddObject(inner_sphere);
+  World(bool default_world) {
+    if (default_world) {
+      // Add First object
+      // Set transform of inner sphere
+      Object inner_sphere(object_type::ObjectType::SPHERE);
+      inner_sphere.SetTransform(Scaling(0.5, 0.5, 0.5));
+      AddObject(inner_sphere);
 
-    // Add second object
-    // Set material of outer sphere
-    Object outer_sphere(object_type::ObjectType::SPHERE);
-    struct Material outer_sphere_material(RGBColor(0.8, 1.0, 0.6), 0.1, 0.7,
-                                          0.2, 200.0);
-    outer_sphere.SetMaterial(outer_sphere_material);
-    AddObject(outer_sphere);
+      // Add second object
+      // Set material of outer sphere
+      Object outer_sphere(object_type::ObjectType::SPHERE);
+      struct Material outer_sphere_material(RGBColor(0.8, 1.0, 0.6), 0.1, 0.7,
+                                            0.2, 200.0);
+      outer_sphere.SetMaterial(outer_sphere_material);
+      AddObject(outer_sphere);
 
-    struct PointLight light;
-    light.SetIntensity(RGBColor(1, 1, 1));
-    light.SetLightPosition(Point1Dim(-10, -10, -10));
-    AddLight(light);
-  }
+      struct PointLight light;
+      light.SetIntensity(RGBColor(1, 1, 1));
+      light.SetLightPosition(Point1Dim(-10, -10, -10));
+      AddLight(light);
+    }
+  };
 
   // Get objects present in the World
   std::vector<Object>& GetObjects();

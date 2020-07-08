@@ -1,9 +1,9 @@
 #include "core/models/camera.h"
 
-void Camera::PixelSize(float hsize, float vsize, float fieldofview,
+void Camera::PixelSize(float height, float width, float fieldofview,
                        float* pixelsize, float* halfheight, float* halfwidth) {
   float half_view = tan(fieldofview / 2.0);
-  float aspect = hsize / vsize;
+  float aspect = width / height;
   if (aspect >= 1) {
     *halfwidth = half_view;
     *halfheight = half_view / aspect;
@@ -11,7 +11,7 @@ void Camera::PixelSize(float hsize, float vsize, float fieldofview,
     *halfwidth = half_view * aspect;
     *halfheight = half_view;
   }
-  *pixelsize = ((*halfwidth) * 2) / hsize;
+  *pixelsize = ((*halfwidth) * 2) / width;
 }
 
 void Camera::RayToPixel(float px, float py, Ray* ray) {
