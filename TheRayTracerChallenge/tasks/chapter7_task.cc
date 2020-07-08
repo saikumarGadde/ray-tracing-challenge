@@ -48,7 +48,7 @@ void Chapter7Task(std::string canvas_file_path) {
   sphere3.GetMaterial().diffuse = 0.7;
   sphere3.GetMaterial().specular = 0.3;
 
-  //
+  // Add world and different objects.
   World world(false);
   struct PointLight point_light(RGBColor(1, 1, 1), Point1Dim(-10, 10, -10));
   world.AddLight(point_light);
@@ -56,13 +56,12 @@ void Chapter7Task(std::string canvas_file_path) {
   world.AddObject(left_wall);
   world.AddObject(right_wall);
   world.AddObject(sphere1);
-  // world.AddObject(sphere2);
-  // world.AddObject(sphere3);
+  world.AddObject(sphere2);
+  world.AddObject(sphere3);
 
-  Camera camera(300, 600, M_PI / 3);
+  Camera camera(600, 1200, M_PI / 3.0);
   camera.SetTransform(ViewTransformation(
       Point1Dim(0, 1.5, -5), Point1Dim(0, 1, 0), Vector1Dim(0, 1, 0)));
-
   Canvas canvas(camera.GetHeight(), camera.GetWidth());
   Render(camera, world, &canvas);
   canvas.CanvasToPPM(canvas_file_path.c_str());

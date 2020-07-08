@@ -79,23 +79,21 @@ struct Intersection* Ray::PopIntersection() {
   return nullptr;
 }
 
-struct Comps Ray::PrepareComputations(struct Intersection intersection) {
+void Ray::PrepareComputations(struct Intersection* hit, struct Comps* comps) {
   //
-  struct Comps comps;
-  comps.t = intersection.GetT();
-  // Intersection object
-  comps.object = intersection.GetObject();
+  comps->t = hit->GetT();
+  // Hit object
+  comps->object = hit->GetObject();
 
-  comps.point = Position(intersection.GetT());
-  comps.eyev = -GetDirection();
-  comps.normalv = intersection.GetObject()->NormalAt(comps.point);
-  if (comps.normalv.dot(comps.eyev) < 0) {
-    comps.inside = true;
-    comps.normalv = -comps.normalv;
+  comps->point = Position(hit->GetT());
+  comps->eyev = -GetDirection();
+  comps->normalv = (hit->GetObject())->NormalAtWorldPoint(comps->point);
+  if ((comps->normalv).dot(comps->eyev) < 0) {
+    comps->inside = true;
+    comps->normalv = -comps->normalv;
   } else {
-    comps.inside = false;
+    comps->inside = false;
   }
-  return comps;
 }
 
 // Color At function
@@ -109,8 +107,10 @@ Eigen::Vector3f Ray::ColorAt(World& world) {
   if (hit == nullptr) {
     return RGBColor(0, 0, 0);
   } else {
-    struct Comps comps = PrepareComputations(*hit);
+    struct Comps comps;
+    PrepareComputations(hit, &comps);
     return ShadeHit(world, comps);
+    // return RGBColor(1, 1, 1);
   }
 }
 

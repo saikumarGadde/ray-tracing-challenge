@@ -90,7 +90,7 @@ class Ray {
   void AddIntersection(struct Intersection* intersection);
 
   // Prepare computations
-  struct Comps PrepareComputations(struct Intersection intersection);
+  void PrepareComputations(struct Intersection* hit, struct Comps* comps);
 
   // Returns the color ar an intersection point of the ray and the world
   Eigen::Vector3f ColorAt(World& world);

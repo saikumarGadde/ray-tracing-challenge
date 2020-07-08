@@ -15,6 +15,8 @@ Eigen::Vector4f CrossProduct4f(Eigen::Vector4f vector1,
 
 // Negating a vector
 Eigen::Vector4f Negate(Eigen::Vector4f vector);
+Eigen::Vector4f NegateVector(Eigen::Vector4f vector);
+Eigen::Vector4f NegatePoint(Eigen::Vector4f point);
 
 // Scalar multiplication of a vector, Vector Scalar Multiply
 Eigen::Vector4f VectorScalarMultiply(Eigen::Vector4f vector,

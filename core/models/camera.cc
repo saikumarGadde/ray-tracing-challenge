@@ -1,19 +1,5 @@
 #include "core/models/camera.h"
 
-void Camera::PixelSize(float height, float width, float fieldofview,
-                       float* pixelsize, float* halfheight, float* halfwidth) {
-  float half_view = tan(fieldofview / 2.0);
-  float aspect = width / height;
-  if (aspect >= 1) {
-    *halfwidth = half_view;
-    *halfheight = half_view / aspect;
-  } else {
-    *halfwidth = half_view * aspect;
-    *halfheight = half_view;
-  }
-  *pixelsize = ((*halfwidth) * 2) / width;
-}
-
 void Camera::RayToPixel(float px, float py, Ray* ray) {
   // The offset to the edge of the canvas to the pixel center
   float xoffset = (px + 0.5) * pixel_size_;
@@ -46,9 +32,4 @@ Eigen::Matrix4f Camera::GetTransform() {
 void Camera::SetPixelSize(float pixel_size) {
   // Sets pixel size
   pixel_size_ = pixel_size;
-}
-
-float Camera::GetPixelSize() {
-  // Returns pixel size
-  return pixel_size_;
 }

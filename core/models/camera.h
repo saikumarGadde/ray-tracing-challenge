@@ -13,8 +13,16 @@ class Camera {
         width_(width),
         field_of_view_(field_of_view),
         transform_(transform) {
-    PixelSize(height, width, field_of_view, &pixel_size_, &half_height_,
-              &half_width_);
+    float half_view = tan(field_of_view / 2.0);
+    float aspect = width / height;
+    if (aspect >= 1) {
+      half_width_ = half_view;
+      half_height_ = half_view / aspect;
+    } else {
+      half_width_ = half_view * aspect;
+      half_height_ = half_view;
+    }
+    pixel_size_ = ((half_width_)*2) / width;
   };
 
   // Obtain the pixel size of the canvas
@@ -30,7 +38,8 @@ class Camera {
   void SetPixelSize(float pixel_size);
 
   // Getters
-  float GetPixelSize();
+  float GetPixelSize() { return pixel_size_; };
+  float GetFieldOfView() { return field_of_view_; }
   float GetWidth() { return width_; };
   float GetHeight() { return height_; };
 

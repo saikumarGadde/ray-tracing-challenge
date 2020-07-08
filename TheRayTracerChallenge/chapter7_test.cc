@@ -11,7 +11,7 @@
 
 TEST(Chapter7Test, TestWorld) {
   // TEST 1
-  World world;
+  World world(true);
   // TEST 2
   Ray ray(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
   ray.IntersectWorld(world);
@@ -24,8 +24,9 @@ TEST(Chapter7Test, TestWorld) {
 
   // Test 2
   Object sphere_object(object_type::ObjectType::SPHERE);
-  struct Intersection i(4, &sphere_object);
-  struct Comps comps = ray.PrepareComputations(i);
+  struct Intersection hit(4, &sphere_object);
+  struct Comps comps;
+  ray.PrepareComputations(&hit, &comps);
   EXPECT_EQ(comps.point, Point1Dim(0, 0, -1));
   EXPECT_EQ(comps.eyev, Vector1Dim(0, 0, -1));
   EXPECT_EQ(comps.normalv, Vector1Dim(0, 0, -1));
@@ -33,28 +34,45 @@ TEST(Chapter7Test, TestWorld) {
 
   // Test 3
   Ray ray2(Point1Dim(0, 0, 0), Vector1Dim(0, 0, 1));
-  struct Intersection i2(1, &sphere_object);
-  comps = ray2.PrepareComputations(i2);
+  struct Intersection hit2(1, &sphere_object);
+  ray2.PrepareComputations(&hit2, &comps);
   EXPECT_EQ(comps.point, Point1Dim(0, 0, 1));
   EXPECT_EQ(comps.eyev, Vector1Dim(0, 0, -1));
   EXPECT_EQ(comps.normalv, Vector1Dim(0, 0, -1));
   EXPECT_TRUE(comps.inside == true);
 
+  // Test 4
+  Ray ray5(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
+  struct Intersection hit5(4, &sphere_object);
+  struct Comps comps5;
+  ray5.PrepareComputations(&hit5, &comps5);
+  EXPECT_TRUE(comps5.inside == false);
+
+  // Test
+  Ray ray6(Point1Dim(0, 0, 0), Vector1Dim(0, 0, 1));
+  struct Intersection hit6(1, &sphere_object);
+  struct Comps comps6;
+  ray6.PrepareComputations(&hit6, &comps6);
+  EXPECT_EQ(comps6.point, Point1Dim(0, 0, 1));
+  EXPECT_EQ(comps6.eyev, Vector1Dim(0, 0, -1));
+  EXPECT_EQ(comps6.normalv, Vector1Dim(0, 0, -1));
+  EXPECT_TRUE(comps6.inside == true);
+
   // TEST 4
   Ray ray3(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
-  struct Intersection i3(4, &(world.GetObjects()[1]));
-  comps = ray3.PrepareComputations(i3);
+  struct Intersection hit3(4, &(world.GetObjects()[1]));
+  ray3.PrepareComputations(&hit3, &comps);
   Eigen::Vector3f c = ray3.ShadeHit(world, comps);
   EXPECT_NEAR(c(0), 0.38066, 0.00001);
   EXPECT_NEAR(c(1), 0.47583, 0.00001);
-  EXPECT_NEAR(c(2), 0.2855, 0.0001);
+  EXPECT_NEAR(c(2), 0.2855, 0.00001);
 
   // Test 5
   Ray ray4(Point1Dim(0, 0, 0), Vector1Dim(0, 0, 1));
   struct PointLight point_light(RGBColor(1, 1, 1), Point1Dim(0, 0.25, 0));
   world.SetLight(point_light, 0);
-  struct Intersection i4(0.5, &(world.GetObjects()[0]));
-  comps = ray4.PrepareComputations(i4);
+  struct Intersection hit4(0.5, &(world.GetObjects()[0]));
+  ray4.PrepareComputations(&hit4, &comps);
   c = ray4.ShadeHit(world, comps);
   EXPECT_NEAR(c(0), 0.90498, 0.00001);
   EXPECT_NEAR(c(1), 0.90498, 0.00001);
@@ -63,7 +81,7 @@ TEST(Chapter7Test, TestWorld) {
 
 TEST(Chapter7Test, TestWorld2) {
   // @TEST1
-  World world;
+  World world(true);
   Ray ray(Point1Dim(0, 0, -5), Vector1Dim(0, 1, 0));
   Eigen::Vector3f color = ray.ColorAt(world);
   EXPECT_NEAR(color(0), 0.0f, 0.00001);
@@ -71,8 +89,9 @@ TEST(Chapter7Test, TestWorld2) {
   EXPECT_NEAR(color(2), 0.0f, 0.00001);
 
   // @TEST2
+  World world2(true);
   Ray ray2(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
-  color = ray2.ColorAt(world);
+  color = ray2.ColorAt(world2);
   EXPECT_NEAR(color(0), 0.38066f, 0.00001);
   EXPECT_NEAR(color(1), 0.47583f, 0.00001);
   EXPECT_NEAR(color(2), 0.2855f, 0.00001);
@@ -140,22 +159,22 @@ TEST(Chapter7upTest, TestWorld3) {
 
 TEST(Chapter7Test, ImplementingACameraTest) {
   // Test 1
-  Camera camera(160, 120, M_PI / 2.0);
-  EXPECT_EQ(camera.h_size_, 160);
-  EXPECT_EQ(camera.v_size_, 120);
-  EXPECT_FLOAT_EQ(camera.field_of_view_, M_PI / 2.0);
+  Camera camera(120, 160, M_PI / 2.0);
+  EXPECT_EQ(camera.GetWidth(), 160);
+  EXPECT_EQ(camera.GetHeight(), 120);
+  EXPECT_FLOAT_EQ(camera.GetFieldOfView(), M_PI / 2.0);
   EXPECT_TRUE(camera.GetTransform() == Eigen::Matrix4f::Identity());
 
   // Test 2
-  Camera camera2(200, 125, M_PI / 2.0);
-  EXPECT_NEAR(camera2.pixel_size_, 0.01, 0.00001);
+  Camera camera2(125, 200, M_PI / 2.0);
+  EXPECT_NEAR(camera2.GetPixelSize(), 0.01, 0.00001);
 
   // Test 3
-  Camera camera3(125, 200, M_PI / 2);
-  EXPECT_NEAR(camera3.pixel_size_, 0.01, 0.00001);
+  Camera camera3(200, 125, M_PI / 2);
+  EXPECT_NEAR(camera3.GetPixelSize(), 0.01, 0.00001);
 
   // Test 4
-  Camera camera4(201, 101, M_PI / 2.0);
+  Camera camera4(101, 201, M_PI / 2.0);
   Ray ray;
   camera4.RayToPixel(100, 50, &ray);
   EXPECT_TRUE(ray.GetOrigin() == Point1Dim(0, 0, 0));
@@ -185,7 +204,7 @@ TEST(Chapter7Test, ImplementingACameraTest) {
 
 TEST(Chapter7Test, RenderFunctionTest) {
   // Test Rendering image
-  World world;
+  World world(true);
   Camera camera(11, 11, M_PI / 2.0);
   camera.SetTransform(ViewTransformation(
       Point1Dim(0, 0, -5), Point1Dim(0, 0, 0), Vector1Dim(0, 1, 0)));
