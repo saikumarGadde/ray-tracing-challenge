@@ -68,6 +68,6 @@ void Chapter7Task(std::string canvas_file_path) {
 }
 
 int main(int argc, char* argv[]) {
-  std::string canvas_file_path = "/Users/gaddekumar/Desktop/chapter7.ppm";
+  std::string canvas_file_path = "/Users/gaddekumar/Desktop/chapter8.ppm";
   Chapter7Task(canvas_file_path);
 }

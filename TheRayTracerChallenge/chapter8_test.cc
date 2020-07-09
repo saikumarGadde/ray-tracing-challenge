@@ -64,3 +64,14 @@ TEST(Chapter8Test, Chapter8Task2) {
   Eigen::Vector3f rgb_color = ray.ShadeHit(world, comps);
   EXPECT_TRUE(rgb_color == RGBColor(0.1, 0.1, 0.1));
 };
+
+TEST(Chapter8Test, Chapter8Task3) {
+  Ray ray(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
+  Object sphere(object_type::ObjectType::SPHERE);
+  sphere.SetTransform(Translation(0, 0, 1));
+  struct Intersection i(5, &sphere);
+  struct Comps comps;
+  ray.PrepareComputations(&i, &comps);
+  EXPECT_TRUE(comps.over_point[2] < -0.001 / 2);
+  EXPECT_TRUE(comps.point[2] > comps.over_point[2]);
+};

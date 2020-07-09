@@ -34,6 +34,8 @@ struct Comps {
   Eigen::Vector4f normalv;
   // The light is Inside the object or outside the object
   bool inside;
+  // Over point
+  Eigen::Vector4f over_point;
 };
 
 class Ray {

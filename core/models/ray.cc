@@ -93,6 +93,7 @@ void Ray::PrepareComputations(struct Intersection* hit, struct Comps* comps) {
     comps->normalv = -comps->normalv;
   } else {
     comps->inside = false;
+    comps->over_point = (comps->point) + (comps->normalv * 0.001);
   }
 }
 
@@ -115,10 +116,9 @@ Eigen::Vector3f Ray::ColorAt(World& world) {
 }
 
 Eigen::Vector3f Ray::ShadeHit(World& world, struct Comps& comps) {
-  Eigen::Vector4f point = Position(comps.t);
-  bool is_shadowed = IsShadowed(world, point);
-  return Lighting2(comps.object->GetMaterial(), world.GetLight(), comps.point,
-                   comps.eyev, comps.normalv, is_shadowed);
+  bool is_shadowed = IsShadowed(world, comps.over_point);
+  return Lighting2(comps.object->GetMaterial(), world.GetLight(),
+                   comps.over_point, comps.eyev, comps.normalv, is_shadowed);
 }
 
 // Calculate the reflection
