@@ -1,6 +1,7 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include "core/models/object.h"
+#include "core/models/ray.h"
 #include "core/models/vector.h"
 #include "core/ops/color_ops.h"
 #include "core/ops/transformations.h"
@@ -62,14 +63,14 @@ TEST(Chapter6Test, ReflectingVectorsTest) {
   // @
   Eigen::Vector4f v = Vector1Dim(1, -1, 0);
   Eigen::Vector4f n = Vector1Dim(0, 1, 0);
-  Eigen::Vector4f r = Reflect(v, n);
+  Eigen::Vector4f r = Ray::Reflect(v, n);
   EXPECT_EQ(r[0], 1.0f);
   EXPECT_EQ(r[1], 1.0f);
   EXPECT_EQ(r[2], 0.0f);
   // @
   v = Vector1Dim(0, -1, 0);
   n = Vector1Dim(sqrt(2) / 2, sqrt(2) / 2, 0);
-  r = Reflect(v, n);
+  r = Ray::Reflect(v, n);
   EXPECT_NEAR(r[0], 1.0f, 0.00001);
   EXPECT_NEAR(r[1], 0.0f, 0.00001);
   EXPECT_NEAR(r[2], 0.0f, 0.00001);
@@ -89,7 +90,7 @@ TEST(Chapter6Test, PhongReflectionTest) {
   Eigen::Vector4f normalv = Vector1Dim(0, 0, -1);
   struct PointLight point_light(RGBColor(1, 1, 1), Point1Dim(0, 0, -10));
   Eigen::Vector3f result =
-      Lighting(material, point_light, position, eyev, normalv);
+      Ray::Lighting2(material, point_light, position, eyev, normalv);
   EXPECT_NEAR(result(0), 1.9f, 0.0001);
   EXPECT_NEAR(result(1), 1.9f, 0.0001);
   EXPECT_NEAR(result(2), 1.9f, 0.0001);
@@ -97,7 +98,7 @@ TEST(Chapter6Test, PhongReflectionTest) {
   // Test 2
   eyev = Vector1Dim(0, sqrt(2) / 2.0, sqrt(2) / 2.0);
   normalv = Vector1Dim(0, 0, -1);
-  result = Lighting(material, point_light, position, eyev, normalv);
+  result = Ray::Lighting2(material, point_light, position, eyev, normalv);
   EXPECT_NEAR(result(0), 1.0f, 0.0001);
   EXPECT_NEAR(result(1), 1.0f, 0.0001);
   EXPECT_NEAR(result(2), 1.0f, 0.0001);
@@ -106,7 +107,7 @@ TEST(Chapter6Test, PhongReflectionTest) {
   eyev = Vector1Dim(0, 0, -1);
   normalv = Vector1Dim(0, 0, -1);
   point_light.SetLightPosition(Point1Dim(0, 10, -10));
-  result = Lighting(material, point_light, position, eyev, normalv);
+  result = Ray::Lighting2(material, point_light, position, eyev, normalv);
   EXPECT_NEAR(result(0), 0.7364f, 0.0001);
   EXPECT_NEAR(result(1), 0.7364f, 0.0001);
   EXPECT_NEAR(result(2), 0.7364f, 0.0001);
@@ -114,7 +115,7 @@ TEST(Chapter6Test, PhongReflectionTest) {
   // Test 4
   eyev = Vector1Dim(0, -sqrt(2) / 2, -sqrt(2) / 2);
   normalv = Vector1Dim(0, 0, -1);
-  result = Lighting(material, point_light, position, eyev, normalv);
+  result = Ray::Lighting2(material, point_light, position, eyev, normalv);
   EXPECT_NEAR(result(0), 1.6364f, 0.0001f);
   EXPECT_NEAR(result(1), 1.6364f, 0.0001f);
   EXPECT_NEAR(result(2), 1.6364f, 0.0001f);
@@ -123,7 +124,7 @@ TEST(Chapter6Test, PhongReflectionTest) {
   eyev = Vector1Dim(0, 0, -1);
   normalv = Vector1Dim(0, 0, -1);
   point_light.SetLightPosition(Point1Dim(0, 0, 10));
-  result = Lighting(material, point_light, position, eyev, normalv);
+  result = Ray::Lighting2(material, point_light, position, eyev, normalv);
   EXPECT_NEAR(result(0), 0.1f, 0.0001f);
   EXPECT_NEAR(result(1), 0.1f, 0.0001f);
   EXPECT_NEAR(result(2), 0.1f, 0.0001f);

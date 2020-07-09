@@ -98,12 +98,13 @@ class Ray {
   // Shade Hit function
   Eigen::Vector3f ShadeHit(World& world, struct Comps& comps);
 
-  Eigen::Vector4f Reflect(Eigen::Vector4f in, Eigen::Vector4f normal);
+  static Eigen::Vector4f Reflect(Eigen::Vector4f in, Eigen::Vector4f normal);
 
-  Eigen::Vector3f Lighting2(struct Material material,
-                            struct PointLight point_light,
-                            Eigen::Vector4f position, Eigen::Vector4f eyev,
-                            Eigen::Vector4f normalv);
+  static Eigen::Vector3f Lighting2(struct Material material,
+                                   struct PointLight point_light,
+                                   Eigen::Vector4f position,
+                                   Eigen::Vector4f eyev,
+                                   Eigen::Vector4f normalv);
 
  private:
   // Origin of the ray

@@ -82,3 +82,13 @@ cc_test(
     "//core:ray_tracing_processor",
   ],
 )
+
+cc_test(
+  name = "chapter8_test",
+  srcs = ["chapter8_test.cc"],
+  copts = ["-Iexternal/gtest/include"],
+  deps = [
+    ":libs",
+    "//core:ray_tracing_processor",
+  ],
+)

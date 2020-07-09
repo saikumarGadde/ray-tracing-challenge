@@ -59,7 +59,7 @@ void Chapter7Task(std::string canvas_file_path) {
   world.AddObject(sphere2);
   world.AddObject(sphere3);
 
-  Camera camera(600, 1200, M_PI / 3.0);
+  Camera camera(300, 600, M_PI / 3.0);
   camera.SetTransform(ViewTransformation(
       Point1Dim(0, 1.5, -5), Point1Dim(0, 1, 0), Vector1Dim(0, 1, 0)));
   Canvas canvas(camera.GetHeight(), camera.GetWidth());
