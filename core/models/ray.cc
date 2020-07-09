@@ -115,8 +115,10 @@ Eigen::Vector3f Ray::ColorAt(World& world) {
 }
 
 Eigen::Vector3f Ray::ShadeHit(World& world, struct Comps& comps) {
+  Eigen::Vector4f point = Position(comps.t);
+  bool is_shadowed = IsShadowed(world, point);
   return Lighting2(comps.object->GetMaterial(), world.GetLight(), comps.point,
-                   comps.eyev, comps.normalv);
+                   comps.eyev, comps.normalv, is_shadowed);
 }
 
 // Calculate the reflection
@@ -168,3 +170,20 @@ Eigen::Vector3f Ray::Lighting2(struct Material material,
   }
   return ambient + diffuse + specular;
 };
+
+bool Ray::IsShadowed(World& world, Eigen::Vector4f point) {
+  //
+  Eigen::Vector4f v = world.GetLight().GetLightPosition() - point;
+  float distance = v.norm();
+  Eigen::Vector4f direction = Normalization(v);
+
+  // Obtain a ray from the point of intersection to the light in World
+  Ray ray(point, direction);
+  ray.IntersectWorld(world);
+
+  struct Intersection* hit = ray.PopIntersection();
+  if ((hit != nullptr) && (hit->GetT() < distance)) {
+    return true;
+  }
+  return false;
+}

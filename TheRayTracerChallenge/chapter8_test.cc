@@ -1,6 +1,7 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include "core/models/camera.h"
+#include "core/models/object_type.h"
 #include "core/models/phong_model.h"
 #include "core/models/ray.h"
 #include "core/models/vector.h"
@@ -41,4 +42,25 @@ TEST(Chapter8Test, Chapter8Task1) {
   // Test 5
   Eigen::Vector4f point4 = Point1Dim(-2, 2, -2);
   EXPECT_TRUE(phong_model::IsShadowed(world, point4) == false);
+};
+
+TEST(Chapter8Test, Chapter8Task2) {
+  World world(false);
+  struct PointLight point_light(RGBColor(1, 1, 1), Point1Dim(0, 0, -10));
+  world.AddLight(point_light);
+  Object sphere1(object_type::ObjectType::SPHERE);
+  world.AddObject(sphere1);
+  Object sphere2(object_type::ObjectType::SPHERE);
+  sphere2.SetTransform(Translation(0, 0, 10));
+  world.AddObject(sphere2);
+
+  Ray ray(Point1Dim(0, 0, 5), Vector1Dim(0, 0, 1));
+  struct Intersection intersection(4, &sphere2);
+
+  // Obtain comps over here
+  struct Comps comps;
+  ray.PrepareComputations(&intersection, &comps);
+
+  Eigen::Vector3f rgb_color = ray.ShadeHit(world, comps);
+  EXPECT_TRUE(rgb_color == RGBColor(0.1, 0.1, 0.1));
 };

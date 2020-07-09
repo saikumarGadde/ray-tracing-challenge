@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include "core/models/world.h"
-
 // Intersection of a ray with the other objects in the world
 struct Intersection {
   // Constructor with distance and object
@@ -106,6 +105,8 @@ class Ray {
                                    Eigen::Vector4f eyev,
                                    Eigen::Vector4f normalv,
                                    bool in_shadow = false);
+
+  bool IsShadowed(World& world, Eigen::Vector4f point);
 
  private:
   // Origin of the ray
