@@ -129,7 +129,7 @@ Eigen::Vector4f Ray::Reflect(Eigen::Vector4f in, Eigen::Vector4f normal) {
 Eigen::Vector3f Ray::Lighting2(struct Material material,
                                struct PointLight point_light,
                                Eigen::Vector4f position, Eigen::Vector4f eyev,
-                               Eigen::Vector4f normalv) {
+                               Eigen::Vector4f normalv, bool in_shadow) {
   // Combine the surface color with the lights color/intensity
   Eigen::Vector3f effective_color =
       RGBColorMultiply(material.rgb_color, point_light.GetIntensity());
@@ -162,6 +162,9 @@ Eigen::Vector3f Ray::Lighting2(struct Material material,
       float factor = pow(reflect_dot_eye, material.shininess);
       specular = point_light.GetIntensity() * material.specular * factor;
     }
+  }
+  if (in_shadow == true) {
+    return ambient;
   }
   return ambient + diffuse + specular;
 };

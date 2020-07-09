@@ -28,7 +28,7 @@ class World {
 
       struct PointLight light;
       light.SetIntensity(RGBColor(1, 1, 1));
-      light.SetLightPosition(Point1Dim(-10, -10, -10));
+      light.SetLightPosition(Point1Dim(-10, 10, -10));
       AddLight(light);
     }
   };

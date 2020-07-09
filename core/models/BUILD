@@ -50,16 +50,28 @@ cc_library(
   ]
 )
 
-cc_library(
-  name = "object_type",
-  hdrs = ["object_type.h"]
-)
 
 cc_library(
   name = "object",
   hdrs = ["object.h"],
   deps = [
     ":sphere",
+  ],
+)
+
+cc_library(
+  name = "object_type",
+  hdrs = ["object_type.h"]
+)
+
+cc_library(
+  name = "phong_model",
+  hdrs = ["phong_model.h"],
+  srcs = ["phong_model.cc"],
+  deps = [
+    "//core/models:light",
+    "//core/models:ray",
+    "@eigen",
   ],
 )
 

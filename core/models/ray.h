@@ -104,7 +104,8 @@ class Ray {
                                    struct PointLight point_light,
                                    Eigen::Vector4f position,
                                    Eigen::Vector4f eyev,
-                                   Eigen::Vector4f normalv);
+                                   Eigen::Vector4f normalv,
+                                   bool in_shadow = false);
 
  private:
   // Origin of the ray

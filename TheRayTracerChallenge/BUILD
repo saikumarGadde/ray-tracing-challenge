@@ -90,5 +90,6 @@ cc_test(
   deps = [
     ":libs",
     "//core:ray_tracing_processor",
+    "//core/models:phong_model",
   ],
 )
