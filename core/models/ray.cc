@@ -93,7 +93,7 @@ void Ray::PrepareComputations(struct Intersection* hit, struct Comps* comps) {
     comps->normalv = -comps->normalv;
   } else {
     comps->inside = false;
-    comps->over_point = (comps->point) + (comps->normalv * 0.001);
+    comps->over_point = (comps->point) + (comps->normalv * 0.01);
   }
 }
 

@@ -72,6 +72,6 @@ TEST(Chapter8Test, Chapter8Task3) {
   struct Intersection i(5, &sphere);
   struct Comps comps;
   ray.PrepareComputations(&i, &comps);
-  EXPECT_TRUE(comps.over_point[2] < -0.001 / 2);
+  EXPECT_TRUE(comps.over_point[2] < -0.01 / 2);
   EXPECT_TRUE(comps.point[2] > comps.over_point[2]);
 };

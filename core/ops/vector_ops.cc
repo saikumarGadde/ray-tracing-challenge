@@ -4,7 +4,7 @@
 float Magnitude(Eigen::Vector4f vector) { return vector.norm(); }
 
 Eigen::Vector4f Normalization(Eigen::Vector4f vector) {
-  assert(vector[3] == 0.0f);
+  // assert(vector[3] == 0.0f);
   Eigen::Vector4f normalized_vector;
   float magnitude = vector.norm();
   return vector / magnitude;
