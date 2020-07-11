@@ -82,9 +82,36 @@ cc_library(
   deps = [
     ":object_type",
     ":material",
+    ":object_abstract",
+    "//core/ops:vector_ops",
+    "//core/models:vector",
+    "@eigen",
+  ],
+)
+
+cc_library(
+  name = "plane",
+  srcs = ["plane.cc"],
+  hdrs = ["plane.h"],
+  deps = [
+    ":object_type",
+    ":material",
+    ":object_abstract",
     "//core/ops:vector_ops",
     "@eigen",
   ],
+)
+
+cc_library(
+  name = "object_abstract",
+  srcs = ["object_abstract.cc"],
+  hdrs = ["object_abstract.h"],
+  deps = [
+    ":material",
+    ":object_type",
+    "//core/ops:vector_ops",
+    "@eigen",
+  ]
 )
 
 cc_library(

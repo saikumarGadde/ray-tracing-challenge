@@ -93,3 +93,14 @@ cc_test(
     "//core/models:phong_model",
   ],
 )
+
+cc_test(
+  name = "chapter9_test",
+  srcs = ["chapter9_test.cc"],
+  copts = ["-Iexternal/gtest/include"],
+  deps = [
+    ":libs",
+    "//core:ray_tracing_processor",
+    "//core/models:phong_model",
+  ],
+)

@@ -1,4 +1,5 @@
 #include "core/models/ray.h"
+#include <iostream>
 
 Eigen::Vector4f Ray::Position(const float distance) const {
   return origin_ + (direction_ * distance);

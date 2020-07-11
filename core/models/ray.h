@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "core/models/world.h"
+
 // Intersection of a ray with the other objects in the world
 struct Intersection {
   // Constructor with distance and object

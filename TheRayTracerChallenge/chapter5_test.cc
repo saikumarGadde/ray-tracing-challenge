@@ -7,16 +7,12 @@
 #include "gtest/gtest.h"
 
 TEST(Chapter5Test, TestBasics) {
-  Eigen::Vector4f origin = Point1Dim(1, 2, 3);
-  Eigen::Vector4f direction = Vector1Dim(4, 5, 6);
-  Ray ray(origin, direction);
-  EXPECT_TRUE(origin == ray.GetOrigin());
-  EXPECT_TRUE(direction == ray.GetDirection());
+  Ray ray(Point1Dim(1, 2, 3), Vector1Dim(4, 5, 6));
+  EXPECT_TRUE(Point1Dim(1, 2, 3) == ray.GetOrigin());
+  EXPECT_TRUE(Vector1Dim(4, 5, 6) == ray.GetDirection());
 
   // Test of the position function
-  origin = Point1Dim(2, 3, 4);
-  direction = Vector1Dim(1, 0, 0);
-  Ray ray2(origin, direction);
+  Ray ray2(Point1Dim(2, 3, 4), Vector1Dim(1, 0, 0));
   Eigen::Vector4f result = ray2.Position(0);
   EXPECT_EQ(result[0], 2.0f);
   EXPECT_EQ(result[1], 3.0f);
@@ -43,9 +39,7 @@ TEST(Chapter5Test, TestBasics) {
 };
 
 TEST(Chapter5Test, TestIntersection) {
-  //
   Ray ray(Point1Dim(0, 0, -5), Vector1Dim(0, 0, 1));
-
   Object sphere_object(object_type::ObjectType::SPHERE);
   ray.IntersectObject(sphere_object);
   std::vector<struct Intersection*>& intersections = ray.GetIntersections();
