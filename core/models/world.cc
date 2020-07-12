@@ -1,11 +1,11 @@
 #include "core/models/world.h"
 
-void World::AddObject(Object object) {
+void World::AddObject(Object& object) {
   // Add objects to the class
   objects_.push_back(object);
 }
 
-void World::AddLight(struct PointLight point_light) {
+void World::AddLight(struct PointLight& point_light) {
   // Add point light to the world class
   point_lights_.push_back(point_light);
 }

@@ -59,6 +59,13 @@ class Ray {
   void GetTransform(Eigen::Matrix4f& transform_matrix, Eigen::Vector4f* origin,
                     Eigen::Vector4f* direction);
 
+  // Local Intersect of the ray and the object
+  void LocalIntersectSphere(Object& object, Eigen::Vector4f& origin,
+                            Eigen::Vector4f& direction);
+
+  void LocalIntersectPlane(Object& object, Eigen::Vector4f& origin,
+                           Eigen::Vector4f& direction);
+
   // Intersect a ray with a sphere
   void IntersectObject(Object& object);
 
@@ -66,13 +73,13 @@ class Ray {
   void IntersectWorld(World& world);
 
   // Return origin
-  Eigen::Vector4f GetOrigin() { return origin_; }
+  Eigen::Vector4f& GetOrigin() { return origin_; }
 
   // Sets origin of the ray vector
   void SetOrigin(Eigen::Vector4f origin) { origin_ = origin; }
 
   // Return direction
-  Eigen::Vector4f GetDirection() { return direction_; }
+  Eigen::Vector4f& GetDirection() { return direction_; }
 
   // Sets direction of the ray vector
   void SetDirection(Eigen::Vector4f direction) { direction_ = direction; }
@@ -110,6 +117,11 @@ class Ray {
                                    bool in_shadow = false);
 
   bool IsShadowed(World& world, Eigen::Vector4f point);
+
+  // Saved origin
+  Eigen::Vector4f saved_origin_;
+  // Saved direction
+  Eigen::Vector4f saved_direction_;
 
  private:
   // Origin of the ray

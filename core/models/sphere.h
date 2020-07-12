@@ -9,7 +9,9 @@
 // Sphere class
 class Sphere : public ObjectAbstract {
  public:
-  Sphere(object_type::ObjectType object_type) : ObjectAbstract(object_type) {}
+  Sphere(object_type::ObjectType object_type) : ObjectAbstract(object_type) {
+    InitSphere();
+  }
 
   virtual ~Sphere() {}
 

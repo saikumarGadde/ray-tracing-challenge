@@ -53,9 +53,12 @@ cc_library(
 
 cc_library(
   name = "object",
+  srcs = ["object.cc"],
   hdrs = ["object.h"],
   deps = [
     ":sphere",
+    ":plane",
+    ":object_type",
   ],
 )
 
@@ -97,6 +100,7 @@ cc_library(
     ":object_type",
     ":material",
     ":object_abstract",
+    "//core/models:vector",
     "//core/ops:vector_ops",
     "@eigen",
   ],

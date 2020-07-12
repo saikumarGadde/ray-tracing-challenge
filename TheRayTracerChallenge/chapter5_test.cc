@@ -82,8 +82,10 @@ TEST(Chapter5Test, TestTrackingIntersections) {
   struct Intersection intersection(3.5, &sphere_object);
   // Assertions
   EXPECT_EQ(intersection.GetT(), 3.5f);
-  EXPECT_EQ(intersection.GetObject()->GetCenter(), sphere_object.GetCenter());
-  EXPECT_EQ(intersection.GetObject()->GetRadius(), sphere_object.GetRadius());
+  EXPECT_EQ(intersection.GetObject()->GetSphere().GetCenter(),
+            sphere_object.GetSphere().GetCenter());
+  EXPECT_EQ(intersection.GetObject()->GetSphere().GetRadius(),
+            sphere_object.GetSphere().GetRadius());
 
   // Test 1
   struct Intersection i1(1, &sphere_object);
@@ -140,7 +142,6 @@ TEST(Chapter5Test, TestTransformations) {
 };
 
 TEST(Chapter5Test, SphereTransformationsTest) {
-  // Test :
   Object sphere_object(object_type::ObjectType::SPHERE);
   Eigen::Matrix4f identity_matrix = Eigen::Matrix4f::Identity();
   EXPECT_EQ(sphere_object.GetTransform(), identity_matrix);

@@ -37,10 +37,10 @@ class World {
   std::vector<Object>& GetObjects();
 
   // Add an object to the world
-  void AddObject(Object object);
+  void AddObject(Object& object);
 
   // Add a light to the world
-  void AddLight(struct PointLight point_light);
+  void AddLight(struct PointLight& point_light);
 
   // Get the point light of the world
   struct PointLight GetLight();

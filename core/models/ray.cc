@@ -12,36 +12,48 @@ void Ray::SetTransform(Eigen::Matrix4f& transform_matrix) {
 
 void Ray::GetTransform(Eigen::Matrix4f& transform_matrix,
                        Eigen::Vector4f* origin, Eigen::Vector4f* direction) {
-  //
   *origin = transform_matrix * origin_;
   *direction = transform_matrix * direction_;
+}
+
+void Ray::LocalIntersectSphere(Object& object, Eigen::Vector4f& origin,
+                               Eigen::Vector4f& direction) {
+  Eigen::Vector4f sphere_to_ray = origin - object.GetSphere().GetCenter();
+  float a = direction.dot(direction);
+  float b = 2 * (direction.dot(sphere_to_ray));
+  float c = sphere_to_ray.dot(sphere_to_ray) -
+            object.GetSphere().GetRadius() * object.GetSphere().GetRadius();
+  float discriminant = b * b - 4 * a * c;
+  if (discriminant < 0) {
+    return;
+  }
+  float t1 = (-b + sqrt(discriminant)) / (2 * a);
+  float t2 = (-b - sqrt(discriminant)) / (2 * a);
+  //
+  struct Intersection* intersection1 = new Intersection(t1, &object);
+  struct Intersection* intersection2 = new Intersection(t2, &object);
+  AddIntersection(intersection1);
+  AddIntersection(intersection2);
+}
+
+void Ray::LocalIntersectPlane(Object& object, Eigen::Vector4f& origin,
+                              Eigen::Vector4f& direction) {
+  if (abs(direction[1]) < 0.00001) {
+    return;
+  }
+  float t = -origin[1] / direction[1];
+  struct Intersection* intersection = new Intersection(t, &object);
+  AddIntersection(intersection);
 }
 
 // Method to intersect the ray with different objects
 void Ray::IntersectObject(Object& object) {
   // Transform the ray using the sphere.transform_ transformation
   if (object.GetObjectType() == object_type::ObjectType::SPHERE) {
-    Eigen::Vector4f origin;
-    Eigen::Vector4f direction;
     Eigen::Matrix4f object_transform_inverse =
         (object.GetTransform()).inverse();
-    GetTransform(object_transform_inverse, &origin, &direction);
-    Eigen::Vector4f sphere_to_ray = origin - object.GetCenter();
-    float a = direction.dot(direction);
-    float b = 2 * (direction.dot(sphere_to_ray));
-    float c = sphere_to_ray.dot(sphere_to_ray) -
-              object.GetRadius() * object.GetRadius();
-    float discriminant = b * b - 4 * a * c;
-    if (discriminant < 0) {
-      return;
-    }
-    float t1 = (-b + sqrt(discriminant)) / (2 * a);
-    float t2 = (-b - sqrt(discriminant)) / (2 * a);
-    //
-    struct Intersection* intersection1 = new Intersection(t1, &object);
-    struct Intersection* intersection2 = new Intersection(t2, &object);
-    AddIntersection(intersection1);
-    AddIntersection(intersection2);
+    GetTransform(object_transform_inverse, &saved_origin_, &saved_direction_);
+    LocalIntersectSphere(object, saved_origin_, saved_direction_);
   }
 }
 
@@ -85,7 +97,6 @@ void Ray::PrepareComputations(struct Intersection* hit, struct Comps* comps) {
   comps->t = hit->GetT();
   // Hit object
   comps->object = hit->GetObject();
-
   comps->point = Position(hit->GetT());
   comps->eyev = -GetDirection();
   comps->normalv = (hit->GetObject())->NormalAtWorldPoint(comps->point);

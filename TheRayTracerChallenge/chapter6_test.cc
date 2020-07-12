@@ -11,26 +11,27 @@ TEST(Chapter6Test, NormalsOnSphere) {
   // Testing normals Test 1
 
   Object sphere_object(object_type::ObjectType::SPHERE);
-  Eigen::Vector4f normal_vector = sphere_object.NormalAt(Point1Dim(1, 0, 0));
+  Eigen::Vector4f normal_vector =
+      sphere_object.NormalAtLocalPoint(Point1Dim(1, 0, 0));
   EXPECT_EQ(normal_vector[0], 1.0f);
   EXPECT_EQ(normal_vector[1], 0.0f);
   EXPECT_EQ(normal_vector[2], 0.0f);
   EXPECT_EQ(normal_vector[3], 0.0f);
 
   // Test 2
-  normal_vector = sphere_object.NormalAt(Point1Dim(0, 1, 0));
+  normal_vector = sphere_object.NormalAtLocalPoint(Point1Dim(0, 1, 0));
   EXPECT_EQ(normal_vector[0], 0.0f);
   EXPECT_EQ(normal_vector[1], 1.0f);
   EXPECT_EQ(normal_vector[2], 0.0f);
   EXPECT_EQ(normal_vector[3], 0.0f);
   // Test 3
-  normal_vector = sphere_object.NormalAt(Point1Dim(0, 0, 1));
+  normal_vector = sphere_object.NormalAtLocalPoint(Point1Dim(0, 0, 1));
   EXPECT_EQ(normal_vector[0], 0.0f);
   EXPECT_EQ(normal_vector[1], 0.0f);
   EXPECT_EQ(normal_vector[2], 1.0f);
   EXPECT_EQ(normal_vector[3], 0.0f);
   // Test 4
-  normal_vector = sphere_object.NormalAt(
+  normal_vector = sphere_object.NormalAtLocalPoint(
       Point1Dim(sqrt(3) / 3.0, sqrt(3) / 3.0, sqrt(3) / 3.0));
   EXPECT_FLOAT_EQ(normal_vector[0], (float)(sqrt(3) / 3.0));
   EXPECT_FLOAT_EQ(normal_vector[1], (float)(sqrt(3) / 3.0));
