@@ -7,7 +7,9 @@
 class Plane : public ObjectAbstract {
  public:
   // Plane constructor
-  Plane(object_type::ObjectType object_type) : ObjectAbstract(object_type) {}
+  Plane(object_type::ObjectType object_type) : ObjectAbstract(object_type) {
+    InitPlane();
+  }
 
   virtual ~Plane() {}
 
@@ -15,6 +17,8 @@ class Plane : public ObjectAbstract {
 
   void InitPlane();
 
+  Eigen::Vector4f& GetNormal();
+
  private:
-  //
+  Eigen::Vector4f normal_;
 };

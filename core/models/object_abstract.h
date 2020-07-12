@@ -16,7 +16,7 @@ class ObjectAbstract {
   void SetTransform(Eigen::Matrix4f transform);
   void SetMaterial(struct Material material);
 
-  Eigen::Matrix4f GetTransform();
+  Eigen::Matrix4f& GetTransform();
   struct Material& GetMaterial();
 
   virtual Eigen::Vector4f NormalAt(Eigen::Vector4f point) = 0;

@@ -12,7 +12,7 @@ void ObjectAbstract::SetMaterial(struct Material material) {
   material_ = material;
 }
 
-Eigen::Matrix4f ObjectAbstract::GetTransform() {
+Eigen::Matrix4f& ObjectAbstract::GetTransform() {
   // Returns transform
   return transform_;
 }

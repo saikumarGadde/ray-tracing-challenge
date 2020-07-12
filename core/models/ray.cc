@@ -6,6 +6,7 @@ Eigen::Vector4f Ray::Position(const float distance) const {
 }
 
 void Ray::SetTransform(Eigen::Matrix4f& transform_matrix) {
+  // The origin of the ray should not be rotated.
   origin_ = transform_matrix * origin_;
   direction_ = transform_matrix * direction_;
 }
@@ -49,11 +50,16 @@ void Ray::LocalIntersectPlane(Object& object, Eigen::Vector4f& origin,
 // Method to intersect the ray with different objects
 void Ray::IntersectObject(Object& object) {
   // Transform the ray using the sphere.transform_ transformation
+
+  Eigen::Matrix4f object_transform_inverse = (object.GetTransform()).inverse();
   if (object.GetObjectType() == object_type::ObjectType::SPHERE) {
-    Eigen::Matrix4f object_transform_inverse =
-        (object.GetTransform()).inverse();
     GetTransform(object_transform_inverse, &saved_origin_, &saved_direction_);
     LocalIntersectSphere(object, saved_origin_, saved_direction_);
+  } else if (object.GetObjectType() == object_type::ObjectType::PLANE) {
+    Eigen::Vector4f origin;
+    Eigen::Vector4f direction;
+    GetTransform(object_transform_inverse, &origin, &direction);
+    LocalIntersectPlane(object, origin, direction);
   }
 }
 
@@ -113,10 +119,8 @@ void Ray::PrepareComputations(struct Intersection* hit, struct Comps* comps) {
 Eigen::Vector3f Ray::ColorAt(World& world) {
   // Step 1 Intersect world function
   IntersectWorld(world);
-
   // Obtain the hit for the ray
   struct Intersection* hit = PopIntersection();
-
   if (hit == nullptr) {
     return RGBColor(0, 0, 0);
   } else {

@@ -39,3 +39,17 @@ cc_binary(
     "//core:ray_tracing_processor",
   ]
 )
+
+cc_binary(
+  name = "chapter9_task",
+  srcs = ["chapter9_task.cc"],
+  deps = [
+    "//core/ops:color_ops",
+    "//core/visual:canvas",
+    "//core/models:vector",
+    "//core/ops:vector_ops",
+    "//core/models:ray",
+    "//core/models:world",
+    "//core:ray_tracing_processor",
+  ]
+)
