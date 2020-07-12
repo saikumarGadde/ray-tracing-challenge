@@ -16,20 +16,6 @@ void Chapter9Task(std::string canvas_file_path) {
   back_wall.GetMaterial().rgb_color(1) = 0.2;
   back_wall.GetMaterial().rgb_color(2) = 0.3;
 
-  // Left wall
-  Object left_wall(object_type::ObjectType::SPHERE);
-  left_wall.SetTransform(Translation(0, 0, 5) * RotationY(-M_PI / 4.0) *
-                         RotationX(M_PI / 2.0) * Scaling(10, 0.01, 10));
-  left_wall.GetMaterial().rgb_color = RGBColor(1, 0.9, 0.9);
-  left_wall.GetMaterial().specular = 0.0f;
-
-  // Right Wall
-  Object right_wall(object_type::ObjectType::SPHERE);
-  right_wall.SetTransform(Translation(0, 0, 5) * RotationY(M_PI / 4.0) *
-                          RotationX(M_PI / 2.0) * Scaling(10, 0.01, 10));
-  right_wall.GetMaterial().rgb_color = RGBColor(1, 0.9, 0.9);
-  right_wall.GetMaterial().specular = 0.0f;
-
   // Large sphere
   Object sphere1(object_type::ObjectType::SPHERE);
   sphere1.SetTransform(Translation(-0.5, 1, 0.5));
@@ -57,9 +43,6 @@ void Chapter9Task(std::string canvas_file_path) {
   struct PointLight point_light(RGBColor(1, 1, 1), Point1Dim(-10, 10, -10));
   world.AddLight(point_light);
   world.AddObject(floor);
-  world.AddObject(back_wall);
-  // world.AddObject(left_wall);
-  // world.AddObject(right_wall);
   world.AddObject(sphere1);
   world.AddObject(sphere2);
   world.AddObject(sphere3);
