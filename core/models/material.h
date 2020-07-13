@@ -1,6 +1,27 @@
 #pragma once
 #include <Eigen/Core>
 #include <Eigen/Dense>
+#include <cmath>
+
+struct StripePattern {
+  // StripePattern constructor in C++
+  StripePattern(Eigen::Vector3f a, Eigen::Vector3f b) : a_(a), b_(b) {
+    //
+
+    //
+  }
+
+  Eigen::Vector3f StripeAt(Eigen::Vector4f point) {
+    if ((int)floor(point[0]) % 2 == 0) {
+      return a_;
+    } else {
+      return b_;
+    }
+  }
+
+  Eigen::Vector3f a_;
+  Eigen::Vector3f b_;
+};
 
 // Material struct
 struct Material {

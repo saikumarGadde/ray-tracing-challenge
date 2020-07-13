@@ -111,6 +111,10 @@ cc_test(
   srcs = ["chapter10_test.cc"],
   copts = ["-Iexternal/gtest/include"],
   deps = [
+    ":libs",
+    "//core/models:plane",
+    "//core:ray_tracing_processor",
+    "//core/models:phong_model",
     "//external:gtest",
     "//external:gflags",
   ],
